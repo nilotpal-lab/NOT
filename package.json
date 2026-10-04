@@ -1,0 +1,51 @@
+{
+  "name": "sst-library",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint src/ scripts/ tests/",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "e2e": "playwright test",
+    "preflight": "tsx scripts/preflight.ts",
+    "db:check": "tsx scripts/db-check.ts",
+    "find-channel-id": "tsx scripts/find-channel-id.ts",
+    "hash-password": "tsx scripts/hash-password.ts",
+    "smoke:telegram": "tsx scripts/smoke-telegram.ts",
+    "eval:chat": "tsx scripts/eval-chat.ts",
+    "backup": "tsx scripts/backup.ts",
+    "restore": "tsx scripts/restore.ts",
+    "verify-library": "tsx scripts/verify-library.ts",
+    "smoke:prod": "tsx scripts/smoke-prod.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.2",
+    "dotenv": "^16.4.7",
+    "groq-sdk": "^1.6.0",
+    "jose": "^6.2.12",
+    "next": "^16.3.8",
+    "pino": "^10.4.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^24.18.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^16.3.8",
+    "pino-pretty": "^13.0.0",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
+    "typescript": "^5.8.0",
+    "typescript-eslint": "^8.71.0",
+    "vitest": "^3.0.0"
+  }
+}
