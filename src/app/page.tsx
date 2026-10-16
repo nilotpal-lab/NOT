@@ -131,28 +131,148 @@ export default function StudentHomePage() {
             </p>
           </div>
 
-          {/* Right Illustration */}
-          <div className="hidden md:flex shrink-0 items-end justify-center w-64 h-44 relative">
-            {/* Floating education icons */}
-            <div className="absolute top-2 left-8 w-11 h-11 rounded-full bg-[#6c72f8]/15 border border-[#6c72f8]/25 flex items-center justify-center text-[#6c72f8] text-lg shadow-sm">
-              🏛️
-            </div>
-            <div className="absolute top-1 right-10 w-10 h-10 rounded-full bg-[#2dd4bf]/20 border border-[#2dd4bf]/30 flex items-center justify-center text-[#0f766e] text-base shadow-sm">
-              🗺️
-            </div>
-            <div className="absolute top-16 right-2 w-10 h-10 rounded-full bg-[#fbbf24]/20 border border-[#fbbf24]/30 flex items-center justify-center text-[#92400e] text-base shadow-sm">
-              📜
-            </div>
-            <div className="absolute top-12 left-0 w-10 h-10 rounded-full bg-[#f87171]/15 border border-[#f87171]/25 flex items-center justify-center text-[#b91c1c] text-base shadow-sm">
-              👥
-            </div>
-            {/* Central book + globe */}
-            <div className="relative flex flex-col items-center">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#6c72f8] to-[#4f46e5] flex items-center justify-center text-4xl shadow-lg mb-2">
-                🌍
-              </div>
-              <div className="text-5xl">📖</div>
-            </div>
+          {/* Right Illustration — SVG scene matching reference */}
+          <div className="hidden md:block shrink-0 w-[420px] h-[210px] relative overflow-hidden rounded-xl">
+            <svg viewBox="0 0 420 210" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+              <defs>
+                <linearGradient id="sSky" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#c5d8f8"/>
+                  <stop offset="45%" stopColor="#d4c5f9"/>
+                  <stop offset="100%" stopColor="#ead5fc"/>
+                </linearGradient>
+                <linearGradient id="sGlobe" x1="20%" y1="10%" x2="80%" y2="90%">
+                  <stop offset="0%" stopColor="#64b5f6"/>
+                  <stop offset="55%" stopColor="#1976d2"/>
+                  <stop offset="100%" stopColor="#0d47a1"/>
+                </linearGradient>
+                <linearGradient id="sPageL" x1="100%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#ffffff"/>
+                  <stop offset="100%" stopColor="#e8eeff"/>
+                </linearGradient>
+                <linearGradient id="sPageR" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#ffffff"/>
+                  <stop offset="100%" stopColor="#dde4ff"/>
+                </linearGradient>
+                <radialGradient id="sGlobeShine" cx="33%" cy="28%" r="60%">
+                  <stop offset="0%" stopColor="white" stopOpacity="0.28"/>
+                  <stop offset="100%" stopColor="white" stopOpacity="0"/>
+                </radialGradient>
+              </defs>
+
+              {/* Sky */}
+              <rect width="420" height="210" fill="url(#sSky)" rx="12"/>
+
+              {/* Clouds */}
+              <ellipse cx="48" cy="30" rx="38" ry="13" fill="white" opacity="0.55"/>
+              <ellipse cx="76" cy="24" rx="24" ry="10" fill="white" opacity="0.45"/>
+              <ellipse cx="340" cy="22" rx="32" ry="12" fill="white" opacity="0.5"/>
+              <ellipse cx="366" cy="16" rx="20" ry="9" fill="white" opacity="0.4"/>
+
+              {/* Birds */}
+              <path d="M190,38 Q195,34 200,38" stroke="#9eb8e8" strokeWidth="1.2" fill="none"/>
+              <path d="M208,30 Q212,26 216,30" stroke="#9eb8e8" strokeWidth="1.2" fill="none"/>
+
+              {/* ── India Gate silhouette (left-center) ── */}
+              {/* Base platform */}
+              <rect x="110" y="188" width="80" height="5" fill="#8896cc" opacity="0.35" rx="1"/>
+              {/* Left pillar */}
+              <rect x="118" y="148" width="10" height="42" fill="#8896cc" opacity="0.35"/>
+              {/* Right pillar */}
+              <rect x="162" y="148" width="10" height="42" fill="#8896cc" opacity="0.35"/>
+              {/* Arch */}
+              <path d="M118,148 Q145,118 172,148" fill="none" stroke="#8896cc" strokeWidth="10" opacity="0.35" strokeLinecap="round"/>
+              {/* Top beam */}
+              <rect x="113" y="145" width="64" height="8" fill="#8896cc" opacity="0.35" rx="1"/>
+              {/* Tower body */}
+              <rect x="133" y="128" width="24" height="18" fill="#8896cc" opacity="0.35" rx="1"/>
+              {/* Tower top */}
+              <rect x="138" y="118" width="14" height="12" fill="#8896cc" opacity="0.35" rx="1"/>
+              {/* Finial */}
+              <rect x="143" y="110" width="4" height="10" fill="#8896cc" opacity="0.35" rx="1"/>
+
+              {/* ── Dome/Parliament silhouette (right) ── */}
+              <rect x="285" y="172" width="90" height="30" fill="#8896cc" opacity="0.28" rx="2"/>
+              <path d="M285,172 Q330,142 375,172" fill="#8896cc" opacity="0.28"/>
+              <ellipse cx="330" cy="171" rx="20" ry="6" fill="#8896cc" opacity="0.28"/>
+              {/* Dome tip */}
+              <line x1="330" y1="138" x2="330" y2="129" stroke="#8896cc" strokeWidth="2.5" opacity="0.3" strokeLinecap="round"/>
+              {/* Windows */}
+              <rect x="295" y="178" width="8" height="14" fill="#b0c4de" opacity="0.2" rx="1"/>
+              <rect x="311" y="178" width="8" height="14" fill="#b0c4de" opacity="0.2" rx="1"/>
+              <rect x="341" y="178" width="8" height="14" fill="#b0c4de" opacity="0.2" rx="1"/>
+              <rect x="357" y="178" width="8" height="14" fill="#b0c4de" opacity="0.2" rx="1"/>
+
+              {/* ── Open Book ── */}
+              {/* Left page */}
+              <path d="M140,190 Q168,172 206,177 L206,210 Q168,207 140,210 Z" fill="url(#sPageL)" stroke="#c5ceff" strokeWidth="0.8"/>
+              {/* Right page */}
+              <path d="M214,177 Q252,172 280,190 L280,210 Q252,207 214,210 Z" fill="url(#sPageR)" stroke="#c5ceff" strokeWidth="0.8"/>
+              {/* Spine */}
+              <path d="M206,177 L206,210 Q210,212 214,210 L214,177 Q210,175 206,177 Z" fill="#9fa8da"/>
+              {/* Page lines left */}
+              <line x1="155" y1="191" x2="199" y2="184" stroke="#dde4ff" strokeWidth="1.2"/>
+              <line x1="155" y1="197" x2="199" y2="190" stroke="#dde4ff" strokeWidth="1.2"/>
+              <line x1="155" y1="203" x2="199" y2="196" stroke="#dde4ff" strokeWidth="1.2"/>
+              {/* Page lines right */}
+              <line x1="221" y1="184" x2="265" y2="191" stroke="#dde4ff" strokeWidth="1.2"/>
+              <line x1="221" y1="190" x2="265" y2="197" stroke="#dde4ff" strokeWidth="1.2"/>
+              <line x1="221" y1="196" x2="265" y2="203" stroke="#dde4ff" strokeWidth="1.2"/>
+              {/* Book shadow */}
+              <ellipse cx="210" cy="212" rx="72" ry="6" fill="#9fa8da" opacity="0.18"/>
+
+              {/* ── Globe ── */}
+              <circle cx="210" cy="148" r="46" fill="url(#sGlobe)"/>
+              {/* Grid lines */}
+              <ellipse cx="210" cy="148" rx="46" ry="17" fill="none" stroke="white" strokeWidth="0.7" opacity="0.4"/>
+              <ellipse cx="210" cy="148" rx="46" ry="30" fill="none" stroke="white" strokeWidth="0.7" opacity="0.3"/>
+              <line x1="210" y1="102" x2="210" y2="194" stroke="white" strokeWidth="0.7" opacity="0.4"/>
+              <line x1="164" y1="148" x2="256" y2="148" stroke="white" strokeWidth="0.7" opacity="0.4"/>
+              <line x1="168" y1="133" x2="252" y2="133" stroke="white" strokeWidth="0.5" opacity="0.25"/>
+              <line x1="168" y1="163" x2="252" y2="163" stroke="white" strokeWidth="0.5" opacity="0.25"/>
+              {/* Continents */}
+              <path d="M192,124 Q203,116 216,120 Q228,116 236,127 Q233,140 222,143 Q206,147 195,140 Q186,136 192,124 Z" fill="#4caf50" opacity="0.82"/>
+              <path d="M196,150 Q206,146 213,151 Q219,157 212,165 Q204,168 197,162 Z" fill="#4caf50" opacity="0.72"/>
+              <path d="M220,138 Q228,135 234,141 Q231,150 224,151 Z" fill="#4caf50" opacity="0.65"/>
+              <path d="M184,130 Q187,125 191,128 L190,135 Q186,134 184,130 Z" fill="#66bb6a" opacity="0.6"/>
+              {/* Globe shine */}
+              <circle cx="210" cy="148" r="46" fill="url(#sGlobeShine)"/>
+              <ellipse cx="196" cy="128" rx="14" ry="9" fill="white" opacity="0.13" transform="rotate(-20 196 128)"/>
+
+              {/* ── Floating Subject Badges ── */}
+
+              {/* History / Temple — top-left */}
+              <circle cx="72" cy="82" r="26" fill="#fff8e1" stroke="#ffb74d" strokeWidth="2.2"/>
+              {/* Pillar icon */}
+              <rect x="62" y="90" width="4" height="14" fill="#e65100" rx="1" opacity="0.9"/>
+              <rect x="68" y="86" width="4" height="18" fill="#e65100" rx="1" opacity="0.9"/>
+              <rect x="74" y="90" width="4" height="14" fill="#e65100" rx="1" opacity="0.9"/>
+              <rect x="60" y="88" width="20" height="3" fill="#e65100" rx="1" opacity="0.9"/>
+              <path d="M61,88 L70,79 L79,88 Z" fill="#f57c00"/>
+
+              {/* Geography / Mountain — top-right */}
+              <circle cx="350" cy="68" r="24" fill="#e8f5e9" stroke="#66bb6a" strokeWidth="2.2"/>
+              <path d="M338,86 L350,67 L362,86 Z" fill="#2e7d32" opacity="0.85"/>
+              <path d="M332,86 L343,73 L354,86 Z" fill="#43a047" opacity="0.72"/>
+              {/* Snow cap */}
+              <path d="M346,67 L350,67 L354,74 Q350,70 346,74 Z" fill="white" opacity="0.85"/>
+
+              {/* Civics / People — mid-left */}
+              <circle cx="50" cy="148" r="24" fill="#fff3e0" stroke="#ffa726" strokeWidth="2.2"/>
+              {/* Person 1 */}
+              <circle cx="44" cy="143" r="5" fill="#ef6c00" opacity="0.88"/>
+              <path d="M37,160 Q44,153 51,160" fill="none" stroke="#ef6c00" strokeWidth="3" strokeLinecap="round" opacity="0.88"/>
+              {/* Person 2 */}
+              <circle cx="56" cy="141" r="5" fill="#f57c00" opacity="0.88"/>
+              <path d="M49,160 Q56,152 63,160" fill="none" stroke="#f57c00" strokeWidth="3" strokeLinecap="round" opacity="0.88"/>
+
+              {/* Economics / Scroll — mid-right */}
+              <circle cx="374" cy="142" r="24" fill="#fce4ec" stroke="#e91e63" strokeWidth="2.2"/>
+              <rect x="362" y="134" width="24" height="16" fill="#f48fb1" rx="3"/>
+              <rect x="360" y="132" width="5" height="20" fill="#c2185b" rx="2" opacity="0.85"/>
+              <rect x="379" y="132" width="5" height="20" fill="#c2185b" rx="2" opacity="0.85"/>
+              <line x1="367" y1="140" x2="381" y2="140" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+              <line x1="367" y1="146" x2="381" y2="146" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+            </svg>
           </div>
         </div>
       </section>
