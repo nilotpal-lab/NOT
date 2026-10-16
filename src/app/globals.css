@@ -2,41 +2,40 @@
 
 @layer base {
   :root {
-    /* Soft Pop Theme - Light & Vibrant Academic */
-    --background: #f7f9fd;
-    --page-bg: #f0f2f8;
-    --foreground: #1e2532;
+    /* SST Library Palette */
+    --background: #f6f8fc;
+    --page-bg: #f6f8fc;
+    --foreground: #1f2937;
     --card: #ffffff;
-    --card-foreground: #1e2532;
+    --card-foreground: #1f2937;
     --popover: #ffffff;
-    --popover-foreground: #1e2532;
+    --popover-foreground: #1f2937;
 
-    /* Primary Soft Pop: Vibrant periwinkle / soft indigo */
-    --primary: #6c72f8;
+    /* Primary: #635BFF indigo accent, deeper #4F46E5, hover #4f46e5 */
+    --primary: #635bff;
     --primary-foreground: #ffffff;
-    --primary-hover: #5a60e6;
+    --primary-hover: #4f46e5;
 
-    /* Secondary Soft Pop: Cheerful Mint / Cyan */
+    /* Secondary & Accent */
     --secondary: #2dd4bf;
     --secondary-foreground: #093730;
-
-    /* Accent Soft Pop: Sunny Amber / Gold */
     --accent: #fbbf24;
     --accent-foreground: #78350f;
 
     /* Muted & Neutral */
-    --muted: #f1f5f9;
+    --muted: #eef2f8;
     --muted-foreground: #64748b;
+    --pale-tint: #eef0ff;
 
-    /* Destructive Soft Pop: Coral Rose */
+    /* Destructive */
     --destructive: #f87171;
     --destructive-foreground: #ffffff;
 
     /* Borders & Radius */
-    --border: #e2e8f0;
-    --input: #e2e8f0;
-    --ring: #6c72f8;
-    --radius: 1rem;
+    --border: #dee6f2;
+    --input: #dee6f2;
+    --ring: #635bff;
+    --radius: 1.25rem;
   }
 
   .dark,

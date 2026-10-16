@@ -15,11 +15,11 @@ export function FloatingTutor({
   currentSubject,
   currentChapter,
 }: FloatingTutorProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [viewState, setViewState] = useState<"welcome" | "launcher" | "chat">("welcome");
   const [messages, setMessages] = useState<Array<{ sender: "bot" | "user"; text: string }>>([
     {
       sender: "bot",
-      text: "Namaste! 🙏 I am your SST Study Buddy. Ask me any question about your NCERT chapters, concepts, or exam summaries in English, Hindi, or Hinglish!",
+      text: "Namaste! 🙏 I am your SST Study Buddy. Ask me any question about your chapters, concepts, or exam summaries in English, Hindi, or Hinglish!",
     },
   ]);
   const [input, setInput] = useState("");
@@ -27,10 +27,10 @@ export function FloatingTutor({
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (isOpen) {
+    if (viewState === "chat") {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages, isOpen]);
+  }, [messages, viewState]);
 
   // Suggested questions based on active subject or general
   const suggestions =
@@ -175,101 +175,117 @@ export function FloatingTutor({
     setMessages([
       {
         sender: "bot",
-        text: "Namaste! 🙏 I am your SST Study Buddy. Ask me any question about your NCERT chapters, concepts, or exam summaries in English, Hindi, or Hinglish!",
+        text: "Namaste! 🙏 I am your SST Study Buddy. Ask me any question about your chapters, concepts, or exam summaries in English, Hindi, or Hinglish!",
       },
     ]);
   }
 
   return (
     <>
-      {/* Floating SST Buddy — Preview Card Style (like reference) */}
-      <div className="fixed bottom-5 right-5 z-40">
-        {!isOpen && (
-          <div className="relative bg-white rounded-2xl shadow-2xl border border-[var(--border)] w-64 overflow-hidden">
-            {/* Close / collapse button */}
-            <button
-              onClick={() => setIsOpen(true)}
-              className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[var(--muted)] hover:bg-[var(--border)] flex items-center justify-center text-[var(--muted-foreground)] transition-colors cursor-pointer z-10"
-              aria-label="Open chat"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
+      {/* ── 1. Expanded Welcome Card ────────────────────────────────────────── */}
+      {viewState === "welcome" && (
+        <aside
+          aria-label="Ask SST Buddy Welcome Card"
+          className="fixed bottom-[22px] right-4 sm:right-6 z-40 w-[calc(100vw-32px)] sm:w-[380px] md:w-[410px] min-h-[224px] bg-gradient-to-br from-white via-white to-[#f2f3ff] border border-[#d9defe] rounded-[26px] shadow-[0_20px_60px_rgba(79,70,229,0.16)] flex items-center gap-2 sm:gap-3 p-4 pr-5 pl-0 relative animate-in fade-in slide-in-from-bottom-3 duration-200"
+        >
+          {/* Close button */}
+          <button
+            onClick={() => setViewState("launcher")}
+            className="absolute top-3 right-3 w-7 h-7 rounded-full bg-[#eef2f8] hover:bg-[#dee6f2] text-[#64748b] hover:text-[#1f2937] flex items-center justify-center transition-colors cursor-pointer z-10"
+            aria-label="Dismiss SST Buddy"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
 
-            {/* Avatar + Buddy name */}
-            <div className="flex items-start gap-3 p-4 pb-3">
-              <div className="w-12 h-12 rounded-xl overflow-hidden bg-black shrink-0 shadow-sm border border-[var(--border)]">
-                <img
-                  src="/tutor-avatar.jpg"
-                  alt="SST Buddy"
-                  className="w-full h-full object-cover object-top"
-                />
-              </div>
-              <div>
-                <div className="font-extrabold text-sm text-[var(--foreground)]">
-                  Ask SST Buddy
-                </div>
-                <div className="text-[11px] text-[var(--muted-foreground)] mt-0.5 leading-snug">
-                  <span className="inline-flex items-center gap-0.5">
-                    <Sparkles className="w-2.5 h-2.5 text-[var(--primary)]" />
-                    Get instant help with chapters, doubts, notes and more!
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Start Chat button */}
-            <div className="px-4 pb-4">
-              <button
-                onClick={() => setIsOpen(true)}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r from-[var(--primary)] to-[#4f46e5] text-white text-xs font-bold shadow-md hover:shadow-lg hover:scale-105 transition-all cursor-pointer active:scale-95"
-              >
-                <MessageSquare className="w-3.5 h-3.5" />
-                Start Chat
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Online indicator */}
-            <span className="absolute top-2 left-3 flex items-center gap-1 text-[10px] font-medium text-emerald-600">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse" />
-              Online
-            </span>
+          {/* Left: Mascot image with transparent background */}
+          <div className="w-[130px] sm:w-[150px] shrink-0 self-end -ml-1 -mb-4 pointer-events-none select-none">
+            <img
+              src="/assets/sst-buddy-mascot.png"
+              alt="SST Buddy student mascot"
+              className="w-full max-h-[225px] object-contain object-bottom drop-shadow-sm"
+            />
           </div>
-        )}
-      </div>
 
-      {/* Floating Chat Drawer */}
-      {isOpen && (
-        <div className="fixed bottom-5 right-5 z-50 w-[92vw] sm:w-[410px] h-[560px] max-h-[85vh] rounded-3xl border border-[var(--border)] bg-[var(--card)] shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
+          {/* Right: Content & CTA */}
+          <div className="flex-1 min-w-0 py-1.5">
+            <div className="flex items-center gap-1.5 text-xs text-[#059669] font-semibold">
+              <span className="w-2 h-2 rounded-full bg-[#10b981] inline-block animate-pulse" />
+              Online
+            </div>
+            <h2 className="text-[20px] sm:text-[21px] font-bold text-[#1f2937] leading-tight my-1.5">
+              Ask SST Buddy
+            </h2>
+            <p className="text-[13px] text-[#64748b] leading-snug mb-3.5">
+              Get help with chapters, notes, and study questions.
+            </p>
+            <button
+              onClick={() => setViewState("chat")}
+              className="w-full h-11 rounded-full bg-gradient-to-r from-[#6b66ff] to-[#4f46e5] text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+            >
+              <MessageSquare className="w-4 h-4" />
+              Start Chat
+              <span className="text-base leading-none ml-0.5">›</span>
+            </button>
+          </div>
+        </aside>
+      )}
+
+      {/* ── 2. Closed Launcher Capsule ───────────────────────────────────────── */}
+      {viewState === "launcher" && (
+        <button
+          onClick={() => setViewState("welcome")}
+          aria-label="Open SST Buddy"
+          className="fixed bottom-[22px] right-4 sm:right-6 z-40 h-[72px] sm:h-[76px] w-[265px] sm:w-[280px] rounded-full bg-gradient-to-r from-[#635bff] to-[#4f46e5] text-white shadow-[0_12px_32px_rgba(99,91,255,0.35)] hover:shadow-[0_16px_40px_rgba(99,91,255,0.45)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-3 px-3.5 cursor-pointer border border-white/20 animate-in fade-in slide-in-from-bottom-2 duration-150"
+        >
+          <div className="w-[50px] h-[50px] rounded-full bg-white/20 ring-2 ring-white/70 overflow-hidden shrink-0 flex items-center justify-center shadow-xs">
+            <img
+              src="/assets/sst-buddy-mascot.png"
+              alt="SST Buddy"
+              className="w-full h-full object-cover object-top"
+            />
+          </div>
+          <div className="flex-1 text-left min-w-0">
+            <div className="text-sm font-bold leading-tight flex items-center gap-1.5 text-white">
+              Ask SST Buddy
+              <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-2xs" />
+            </div>
+            <div className="text-[11px] text-white/85 font-medium mt-0.5">
+              Study help, anytime
+            </div>
+          </div>
+        </button>
+      )}
+
+      {/* ── 3. Active Chat Drawer ───────────────────────────────────────────── */}
+      {viewState === "chat" && (
+        <div className="fixed bottom-5 right-4 sm:right-6 z-50 w-[calc(100vw-32px)] sm:w-[410px] h-[570px] max-h-[85vh] rounded-[26px] border border-[var(--border)] bg-[var(--card)] shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-250">
           {/* Header Bar */}
-          <div className="px-5 py-3.5 bg-gradient-to-r from-[var(--primary)] to-[#4f46e5] text-white flex items-center justify-between shadow-xs">
+          <div className="px-5 py-3.5 bg-gradient-to-r from-[#635bff] to-[#4f46e5] text-white flex items-center justify-between shadow-xs">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-full overflow-hidden bg-black border border-white/80 shrink-0 flex items-center justify-center shadow-xs">
+              <div className="w-9 h-9 rounded-full overflow-hidden bg-white/20 ring-1 ring-white/60 shrink-0 flex items-center justify-center shadow-xs">
                 <img
-                  src="/tutor-avatar.jpg"
+                  src="/assets/sst-buddy-mascot.png"
                   alt="SST Study Buddy"
                   className="w-full h-full object-cover object-top"
                 />
               </div>
               <div>
                 <h4 className="text-sm font-bold tracking-tight">SST AI Study Buddy</h4>
-                <p className="text-[10px] text-white/80">NCERT Classes 6–10 (English, Hindi, Hinglish)</p>
+                <p className="text-[10px] text-white/80">Classes 6–10 (English, Hindi, Hinglish)</p>
               </div>
             </div>
 
             <div className="flex items-center gap-1">
               <button
                 onClick={handleResetChat}
-                aria-label="Restart chat"
+                aria-label="Restart conversation"
                 className="p-1.5 rounded-full hover:bg-white/20 text-white transition-colors cursor-pointer"
                 title="Restart conversation"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
               </button>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => setViewState("launcher")}
                 aria-label="Close Assistant"
                 className="p-1.5 rounded-full hover:bg-white/20 text-white transition-colors cursor-pointer"
               >
@@ -279,7 +295,7 @@ export function FloatingTutor({
           </div>
 
           {/* Quick Suggestions Chips */}
-          <div className="px-3 py-2 bg-[var(--muted)]/40 border-b border-[var(--border)] flex items-center gap-1.5 overflow-x-auto scrollbar-none">
+          <div className="px-3 py-2 bg-[var(--muted)]/50 border-b border-[var(--border)] flex items-center gap-1.5 overflow-x-auto scrollbar-none">
             <span className="text-[10px] font-bold text-[var(--muted-foreground)] uppercase tracking-wider shrink-0 flex items-center gap-1">
               <Sparkles className="w-3 h-3 text-[var(--primary)]" /> Ask:
             </span>
@@ -296,16 +312,16 @@ export function FloatingTutor({
           </div>
 
           {/* Messages Feed */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[var(--background)]/50 text-xs">
+          <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[var(--background)]/60 text-xs">
             {messages.map((m, idx) => (
               <div
                 key={idx}
                 className={`flex gap-2 items-start ${m.sender === "user" ? "justify-end" : "justify-start"}`}
               >
                 {m.sender === "bot" && (
-                  <div className="w-6 h-6 rounded-full overflow-hidden bg-black border border-[var(--border)] shrink-0 mt-0.5 shadow-xs">
+                  <div className="w-7 h-7 rounded-full overflow-hidden bg-[#eef0ff] border border-[#dee6f2] shrink-0 mt-0.5 shadow-2xs flex items-center justify-center">
                     <img
-                      src="/tutor-avatar.jpg"
+                      src="/assets/sst-buddy-mascot.png"
                       alt="SST Buddy"
                       className="w-full h-full object-cover object-top"
                     />
@@ -328,9 +344,9 @@ export function FloatingTutor({
             ))}
             {loading && (
               <div className="flex gap-2 items-center justify-start">
-                <div className="w-6 h-6 rounded-full overflow-hidden bg-black border border-[var(--border)] shrink-0 shadow-xs">
+                <div className="w-7 h-7 rounded-full overflow-hidden bg-[#eef0ff] border border-[#dee6f2] shrink-0 shadow-2xs flex items-center justify-center">
                   <img
-                    src="/tutor-avatar.jpg"
+                    src="/assets/sst-buddy-mascot.png"
                     alt="SST Buddy"
                     className="w-full h-full object-cover object-top"
                   />
@@ -355,7 +371,7 @@ export function FloatingTutor({
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask anything about NCERT SST..."
+              placeholder="Ask anything about SST..."
               className="flex-1 px-3.5 py-2 rounded-full border border-[var(--border)] bg-[var(--background)] text-xs text-[var(--foreground)] placeholder-[var(--muted-foreground)] focus:outline-hidden focus:ring-2 focus:ring-[var(--primary)]"
             />
             <button

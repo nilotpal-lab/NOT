@@ -106,185 +106,43 @@ export default function StudentHomePage() {
   return (
     <div className="pb-24">
       {/* ── Hero Banner ────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden mx-4 sm:mx-6 lg:mx-auto max-w-6xl mt-5 rounded-2xl bg-gradient-to-br from-[#e8eeff] via-[#dde4ff] to-[#cdd6ff] border border-[#c5ceff] shadow-sm">
-        {/* Background decorative blobs */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-white/40 to-transparent rounded-full -mr-20 -mt-20" />
-          <div className="absolute bottom-0 left-0 w-56 h-56 bg-gradient-to-tr from-[#6c72f8]/10 to-transparent rounded-full -ml-10 -mb-10" />
-        </div>
-
-        <div className="relative z-10 flex items-center justify-between gap-4 px-8 sm:px-10 py-8 sm:py-10">
+      <section className="mx-4 sm:mx-6 lg:mx-auto max-w-[1180px] mt-6 bg-gradient-to-br from-white to-[#f0f3ff] border border-[var(--border)] rounded-[26px] shadow-[0_8px_26px_rgba(36,54,100,0.08)] p-6 sm:p-8 lg:p-9">
+        <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] items-center gap-6 lg:gap-8 min-h-[300px]">
           {/* Left Text Content */}
-          <div className="flex-1 space-y-3 max-w-md">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/70 text-[var(--primary)] border border-[var(--primary)]/20 backdrop-blur-sm">
-              <Sparkles className="w-3 h-3" />
-              Teacher &amp; Student Dedicated Portal
+          <div className="space-y-4 max-w-[560px]">
+            <div>
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-[#ecebff] text-[#5b54ec] border border-[#d9defe]/60">
+                <Sparkles className="w-3.5 h-3.5" />
+                Student Learning Portal
+              </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#1a1f35] leading-tight">
-              Social Science{" "}
-              <span className="text-[var(--primary)]">Study Library</span>
+            <h1 className="text-2xl sm:text-3xl lg:text-[44px] font-extrabold tracking-tight text-[#1f2937] leading-[1.14] whitespace-normal xl:whitespace-nowrap">
+              Social Science Study Library
             </h1>
-            <p className="text-sm text-[#4a5380] leading-relaxed">
-              Direct chapter access, notes, textbooks, and interactive presentations{" "}
-              for Classes 6 to 10. Read online with instant streaming or download
-              files in one click.
+            <p className="text-sm sm:text-[15px] text-[#64748b] leading-relaxed">
+              Explore chapters, notes, textbooks, and interactive presentations for Classes 6 to 10. Read online or download study materials in one click.
             </p>
           </div>
 
-          {/* Right Illustration — SVG scene matching reference */}
-          <div className="hidden md:block shrink-0 w-[420px] h-[210px] relative overflow-hidden rounded-xl">
-            <svg viewBox="0 0 420 210" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-              <defs>
-                <linearGradient id="sSky" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#c5d8f8"/>
-                  <stop offset="45%" stopColor="#d4c5f9"/>
-                  <stop offset="100%" stopColor="#ead5fc"/>
-                </linearGradient>
-                <linearGradient id="sGlobe" x1="20%" y1="10%" x2="80%" y2="90%">
-                  <stop offset="0%" stopColor="#64b5f6"/>
-                  <stop offset="55%" stopColor="#1976d2"/>
-                  <stop offset="100%" stopColor="#0d47a1"/>
-                </linearGradient>
-                <linearGradient id="sPageL" x1="100%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#ffffff"/>
-                  <stop offset="100%" stopColor="#e8eeff"/>
-                </linearGradient>
-                <linearGradient id="sPageR" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#ffffff"/>
-                  <stop offset="100%" stopColor="#dde4ff"/>
-                </linearGradient>
-                <radialGradient id="sGlobeShine" cx="33%" cy="28%" r="60%">
-                  <stop offset="0%" stopColor="white" stopOpacity="0.28"/>
-                  <stop offset="100%" stopColor="white" stopOpacity="0"/>
-                </radialGradient>
-              </defs>
-
-              {/* Sky */}
-              <rect width="420" height="210" fill="url(#sSky)" rx="12"/>
-
-              {/* Clouds */}
-              <ellipse cx="48" cy="30" rx="38" ry="13" fill="white" opacity="0.55"/>
-              <ellipse cx="76" cy="24" rx="24" ry="10" fill="white" opacity="0.45"/>
-              <ellipse cx="340" cy="22" rx="32" ry="12" fill="white" opacity="0.5"/>
-              <ellipse cx="366" cy="16" rx="20" ry="9" fill="white" opacity="0.4"/>
-
-              {/* Birds */}
-              <path d="M190,38 Q195,34 200,38" stroke="#9eb8e8" strokeWidth="1.2" fill="none"/>
-              <path d="M208,30 Q212,26 216,30" stroke="#9eb8e8" strokeWidth="1.2" fill="none"/>
-
-              {/* ── India Gate silhouette (left-center) ── */}
-              {/* Base platform */}
-              <rect x="110" y="188" width="80" height="5" fill="#8896cc" opacity="0.35" rx="1"/>
-              {/* Left pillar */}
-              <rect x="118" y="148" width="10" height="42" fill="#8896cc" opacity="0.35"/>
-              {/* Right pillar */}
-              <rect x="162" y="148" width="10" height="42" fill="#8896cc" opacity="0.35"/>
-              {/* Arch */}
-              <path d="M118,148 Q145,118 172,148" fill="none" stroke="#8896cc" strokeWidth="10" opacity="0.35" strokeLinecap="round"/>
-              {/* Top beam */}
-              <rect x="113" y="145" width="64" height="8" fill="#8896cc" opacity="0.35" rx="1"/>
-              {/* Tower body */}
-              <rect x="133" y="128" width="24" height="18" fill="#8896cc" opacity="0.35" rx="1"/>
-              {/* Tower top */}
-              <rect x="138" y="118" width="14" height="12" fill="#8896cc" opacity="0.35" rx="1"/>
-              {/* Finial */}
-              <rect x="143" y="110" width="4" height="10" fill="#8896cc" opacity="0.35" rx="1"/>
-
-              {/* ── Dome/Parliament silhouette (right) ── */}
-              <rect x="285" y="172" width="90" height="30" fill="#8896cc" opacity="0.28" rx="2"/>
-              <path d="M285,172 Q330,142 375,172" fill="#8896cc" opacity="0.28"/>
-              <ellipse cx="330" cy="171" rx="20" ry="6" fill="#8896cc" opacity="0.28"/>
-              {/* Dome tip */}
-              <line x1="330" y1="138" x2="330" y2="129" stroke="#8896cc" strokeWidth="2.5" opacity="0.3" strokeLinecap="round"/>
-              {/* Windows */}
-              <rect x="295" y="178" width="8" height="14" fill="#b0c4de" opacity="0.2" rx="1"/>
-              <rect x="311" y="178" width="8" height="14" fill="#b0c4de" opacity="0.2" rx="1"/>
-              <rect x="341" y="178" width="8" height="14" fill="#b0c4de" opacity="0.2" rx="1"/>
-              <rect x="357" y="178" width="8" height="14" fill="#b0c4de" opacity="0.2" rx="1"/>
-
-              {/* ── Open Book ── */}
-              {/* Left page */}
-              <path d="M140,190 Q168,172 206,177 L206,210 Q168,207 140,210 Z" fill="url(#sPageL)" stroke="#c5ceff" strokeWidth="0.8"/>
-              {/* Right page */}
-              <path d="M214,177 Q252,172 280,190 L280,210 Q252,207 214,210 Z" fill="url(#sPageR)" stroke="#c5ceff" strokeWidth="0.8"/>
-              {/* Spine */}
-              <path d="M206,177 L206,210 Q210,212 214,210 L214,177 Q210,175 206,177 Z" fill="#9fa8da"/>
-              {/* Page lines left */}
-              <line x1="155" y1="191" x2="199" y2="184" stroke="#dde4ff" strokeWidth="1.2"/>
-              <line x1="155" y1="197" x2="199" y2="190" stroke="#dde4ff" strokeWidth="1.2"/>
-              <line x1="155" y1="203" x2="199" y2="196" stroke="#dde4ff" strokeWidth="1.2"/>
-              {/* Page lines right */}
-              <line x1="221" y1="184" x2="265" y2="191" stroke="#dde4ff" strokeWidth="1.2"/>
-              <line x1="221" y1="190" x2="265" y2="197" stroke="#dde4ff" strokeWidth="1.2"/>
-              <line x1="221" y1="196" x2="265" y2="203" stroke="#dde4ff" strokeWidth="1.2"/>
-              {/* Book shadow */}
-              <ellipse cx="210" cy="212" rx="72" ry="6" fill="#9fa8da" opacity="0.18"/>
-
-              {/* ── Globe ── */}
-              <circle cx="210" cy="148" r="46" fill="url(#sGlobe)"/>
-              {/* Grid lines */}
-              <ellipse cx="210" cy="148" rx="46" ry="17" fill="none" stroke="white" strokeWidth="0.7" opacity="0.4"/>
-              <ellipse cx="210" cy="148" rx="46" ry="30" fill="none" stroke="white" strokeWidth="0.7" opacity="0.3"/>
-              <line x1="210" y1="102" x2="210" y2="194" stroke="white" strokeWidth="0.7" opacity="0.4"/>
-              <line x1="164" y1="148" x2="256" y2="148" stroke="white" strokeWidth="0.7" opacity="0.4"/>
-              <line x1="168" y1="133" x2="252" y2="133" stroke="white" strokeWidth="0.5" opacity="0.25"/>
-              <line x1="168" y1="163" x2="252" y2="163" stroke="white" strokeWidth="0.5" opacity="0.25"/>
-              {/* Continents */}
-              <path d="M192,124 Q203,116 216,120 Q228,116 236,127 Q233,140 222,143 Q206,147 195,140 Q186,136 192,124 Z" fill="#4caf50" opacity="0.82"/>
-              <path d="M196,150 Q206,146 213,151 Q219,157 212,165 Q204,168 197,162 Z" fill="#4caf50" opacity="0.72"/>
-              <path d="M220,138 Q228,135 234,141 Q231,150 224,151 Z" fill="#4caf50" opacity="0.65"/>
-              <path d="M184,130 Q187,125 191,128 L190,135 Q186,134 184,130 Z" fill="#66bb6a" opacity="0.6"/>
-              {/* Globe shine */}
-              <circle cx="210" cy="148" r="46" fill="url(#sGlobeShine)"/>
-              <ellipse cx="196" cy="128" rx="14" ry="9" fill="white" opacity="0.13" transform="rotate(-20 196 128)"/>
-
-              {/* ── Floating Subject Badges ── */}
-
-              {/* History / Temple — top-left */}
-              <circle cx="72" cy="82" r="26" fill="#fff8e1" stroke="#ffb74d" strokeWidth="2.2"/>
-              {/* Pillar icon */}
-              <rect x="62" y="90" width="4" height="14" fill="#e65100" rx="1" opacity="0.9"/>
-              <rect x="68" y="86" width="4" height="18" fill="#e65100" rx="1" opacity="0.9"/>
-              <rect x="74" y="90" width="4" height="14" fill="#e65100" rx="1" opacity="0.9"/>
-              <rect x="60" y="88" width="20" height="3" fill="#e65100" rx="1" opacity="0.9"/>
-              <path d="M61,88 L70,79 L79,88 Z" fill="#f57c00"/>
-
-              {/* Geography / Mountain — top-right */}
-              <circle cx="350" cy="68" r="24" fill="#e8f5e9" stroke="#66bb6a" strokeWidth="2.2"/>
-              <path d="M338,86 L350,67 L362,86 Z" fill="#2e7d32" opacity="0.85"/>
-              <path d="M332,86 L343,73 L354,86 Z" fill="#43a047" opacity="0.72"/>
-              {/* Snow cap */}
-              <path d="M346,67 L350,67 L354,74 Q350,70 346,74 Z" fill="white" opacity="0.85"/>
-
-              {/* Civics / People — mid-left */}
-              <circle cx="50" cy="148" r="24" fill="#fff3e0" stroke="#ffa726" strokeWidth="2.2"/>
-              {/* Person 1 */}
-              <circle cx="44" cy="143" r="5" fill="#ef6c00" opacity="0.88"/>
-              <path d="M37,160 Q44,153 51,160" fill="none" stroke="#ef6c00" strokeWidth="3" strokeLinecap="round" opacity="0.88"/>
-              {/* Person 2 */}
-              <circle cx="56" cy="141" r="5" fill="#f57c00" opacity="0.88"/>
-              <path d="M49,160 Q56,152 63,160" fill="none" stroke="#f57c00" strokeWidth="3" strokeLinecap="round" opacity="0.88"/>
-
-              {/* Economics / Scroll — mid-right */}
-              <circle cx="374" cy="142" r="24" fill="#fce4ec" stroke="#e91e63" strokeWidth="2.2"/>
-              <rect x="362" y="134" width="24" height="16" fill="#f48fb1" rx="3"/>
-              <rect x="360" y="132" width="5" height="20" fill="#c2185b" rx="2" opacity="0.85"/>
-              <rect x="379" y="132" width="5" height="20" fill="#c2185b" rx="2" opacity="0.85"/>
-              <line x1="367" y1="140" x2="381" y2="140" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-              <line x1="367" y1="146" x2="381" y2="146" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-            </svg>
+          {/* Right Artwork — Transparent PNG from asset pack */}
+          <div className="flex items-center justify-center w-full max-h-[310px]">
+            <img
+              src="/assets/hero-globe-book-social-studies.png"
+              alt="Globe rising from an open book with social studies icons"
+              className="w-full max-h-[300px] object-contain drop-shadow-sm select-none"
+            />
           </div>
         </div>
       </section>
 
       {/* ── Filters (CLASS tabs + SUBJECT chips + Search) ─────────────────── */}
-      <div className="sticky top-[57px] z-30 bg-[var(--page-bg)]/95 backdrop-blur-md border-b border-[var(--border)] shadow-xs">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 space-y-2.5">
+      <div className="sticky top-20 z-30 bg-[var(--page-bg)]/95 backdrop-blur-md border-b border-[var(--border)] shadow-2xs mt-4">
+        <div className="max-w-[1180px] mx-auto px-4 sm:px-6 py-3 space-y-2.5">
           {/* CLASS row */}
           <div className="flex items-center gap-2.5 overflow-x-auto scrollbar-none">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-[var(--muted-foreground)] shrink-0 flex items-center gap-1">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-              Class:
+            <span className="text-[11px] font-bold uppercase tracking-widest text-[var(--muted-foreground)] shrink-0 flex items-center gap-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-[var(--muted-foreground)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              CLASS:
             </span>
             {CLASSES.map((cls) => {
               const active = selectedClass === cls;
@@ -292,10 +150,10 @@ export default function StudentHomePage() {
                 <button
                   key={cls}
                   onClick={() => setSelectedClass(cls)}
-                  className={`px-5 py-1.5 rounded-full text-sm font-semibold shrink-0 cursor-pointer transition-all duration-150 ${
+                  className={`px-5 py-1.5 rounded-full text-xs sm:text-sm font-semibold shrink-0 cursor-pointer transition-all duration-150 ${
                     active
-                      ? "bg-[var(--primary)] text-white shadow-md shadow-[var(--primary)]/25"
-                      : "bg-white text-[var(--foreground)] border border-[var(--border)] hover:border-[var(--primary)]/40 hover:bg-[var(--primary)]/5"
+                      ? "bg-gradient-to-r from-[var(--primary)] to-[#4f46e5] text-white shadow-md shadow-[var(--primary)]/25 border-transparent"
+                      : "bg-white text-[var(--foreground)] border border-[var(--border)] hover:bg-[#eef0ff]/60 hover:border-[var(--primary)]/40"
                   }`}
                 >
                   Class {cls}
@@ -308,9 +166,9 @@ export default function StudentHomePage() {
           <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap justify-between">
             {/* Subject chips row */}
             <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none flex-wrap sm:flex-nowrap">
-              <span className="text-[11px] font-bold uppercase tracking-widest text-[var(--muted-foreground)] shrink-0 flex items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                Subject:
+              <span className="text-[11px] font-bold uppercase tracking-widest text-[var(--muted-foreground)] shrink-0 flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-[var(--muted-foreground)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                SUBJECT:
               </span>
               {SUBJECTS.map((sub) => {
                 const active = selectedSubject === sub.id;
@@ -320,8 +178,8 @@ export default function StudentHomePage() {
                     onClick={() => setSelectedSubject(sub.id)}
                     className={`px-3.5 py-1 rounded-full text-xs font-semibold shrink-0 cursor-pointer transition-all ${
                       active
-                        ? "bg-[var(--primary)] text-white shadow-sm"
-                        : "bg-white text-[var(--muted-foreground)] border border-[var(--border)] hover:bg-[var(--primary)]/8 hover:text-[var(--primary)] hover:border-[var(--primary)]/30"
+                        ? "bg-gradient-to-r from-[var(--primary)] to-[#4f46e5] text-white shadow-xs border-transparent"
+                        : "bg-white text-[var(--muted-foreground)] border border-[var(--border)] hover:bg-[#eef0ff]/60 hover:text-[var(--foreground)] hover:border-[var(--primary)]/30"
                     }`}
                   >
                     {sub.label}
@@ -332,17 +190,20 @@ export default function StudentHomePage() {
 
             {/* Search */}
             <div className="relative flex items-center gap-2 shrink-0 w-full sm:w-auto">
-              <div className="relative flex-1 sm:w-56">
+              <div className="relative flex-1 sm:w-60">
                 <Search className="w-3.5 h-3.5 text-[var(--muted-foreground)] absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   placeholder="Search chapters, notes, or files..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-8 pr-3 py-1.5 rounded-full border border-[var(--border)] bg-white text-xs text-[var(--foreground)] placeholder-[var(--muted-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/40 focus:border-[var(--primary)]/50 shadow-xs"
+                  className="w-full pl-8.5 pr-3 py-1.5 rounded-full border border-[var(--border)] bg-white text-xs text-[var(--foreground)] placeholder-[var(--muted-foreground)] focus:outline-hidden focus:ring-2 focus:ring-[var(--primary)]/40 focus:border-[var(--primary)] shadow-2xs"
                 />
               </div>
-              <button className="p-1.5 rounded-lg border border-[var(--border)] bg-white text-[var(--muted-foreground)] hover:text-[var(--primary)] hover:border-[var(--primary)]/30 transition-colors cursor-pointer shrink-0">
+              <button
+                className="p-1.5 rounded-lg border border-[var(--border)] bg-white text-[var(--muted-foreground)] hover:text-[var(--primary)] hover:border-[var(--primary)]/40 transition-colors cursor-pointer shrink-0"
+                aria-label="Filter options"
+              >
                 <SlidersHorizontal className="w-4 h-4" />
               </button>
             </div>
@@ -351,9 +212,9 @@ export default function StudentHomePage() {
       </div>
 
       {/* ── Main Content Area ──────────────────────────────────────────────── */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 mt-5">
+      <div className="max-w-[1180px] mx-auto px-4 sm:px-6 mt-5">
         {loading ? (
-          <div className="bg-white rounded-2xl border border-[var(--border)] shadow-xs p-8 space-y-4">
+          <div className="bg-white rounded-[26px] border border-[var(--border)] shadow-[0_8px_26px_rgba(36,54,100,0.06)] p-8 space-y-4">
             {[1, 2, 3].map((i) => (
               <div key={i} className="animate-pulse flex gap-4 items-center">
                 <div className="w-10 h-10 rounded-xl bg-[var(--muted)] shrink-0" />
@@ -365,7 +226,7 @@ export default function StudentHomePage() {
             ))}
           </div>
         ) : error ? (
-          <div className="bg-white rounded-2xl border border-red-200 p-6 flex items-center justify-between shadow-xs">
+          <div className="bg-white rounded-[26px] border border-red-200 p-6 flex items-center justify-between shadow-2xs">
             <span className="text-sm text-red-600">{error}</span>
             <button
               onClick={fetchCatalog}
@@ -375,16 +236,18 @@ export default function StudentHomePage() {
             </button>
           </div>
         ) : chapters.length === 0 ? (
-          /* Empty State */
-          <div className="bg-white rounded-2xl border border-[var(--border)] shadow-xs px-8 py-16 text-center space-y-4">
-            <div className="w-16 h-16 rounded-2xl bg-[var(--primary)]/10 flex items-center justify-center mx-auto">
-              <BookOpen className="w-8 h-8 text-[var(--primary)]" />
+          /* Empty State matching design preview */
+          <div className="bg-white rounded-[26px] border border-[var(--border)] shadow-[0_8px_26px_rgba(36,54,100,0.06)] px-8 py-20 text-center space-y-3.5">
+            <div className="w-14 h-14 rounded-2xl bg-[#eef0ff] border border-[#dee6f2] flex items-center justify-center mx-auto text-[#635bff] shadow-2xs">
+              <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+              </svg>
             </div>
             <div>
-              <h3 className="text-base font-bold text-[var(--foreground)]">No chapters available yet</h3>
-              <p className="text-sm text-[var(--muted-foreground)] mt-1 max-w-xs mx-auto">
-                Your teacher has not uploaded any materials for Class {selectedClass}{" "}
-                in this subject category.
+              <h3 className="text-lg font-bold text-[#1f2937]">No chapters available yet</h3>
+              <p className="text-sm text-[#64748b] mt-1 max-w-sm mx-auto leading-relaxed">
+                Your teacher has not uploaded any published materials for Class {selectedClass} in this subject category.
               </p>
             </div>
           </div>

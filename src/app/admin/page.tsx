@@ -68,7 +68,7 @@ function getKindBadge(kind: string, teacherName?: string | null): React.ReactNod
     case "ncert_pdf":
       return (
         <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300">
-          NCERT PDF
+          Textbook PDF
         </span>
       );
     case "ppt":
@@ -606,7 +606,7 @@ export default function AdminDashboardPage() {
             </span>
           </div>
           <p className="text-xs sm:text-sm text-[var(--muted)] mt-1">
-            Organize NCERT chapters, cascade renames, manage Telegram chunks, and control student access.
+            Organize chapter materials, cascade renames, manage Telegram chunks, and control student access.
           </p>
         </div>
 
@@ -762,7 +762,7 @@ export default function AdminDashboardPage() {
               className="w-full px-2.5 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--background)] text-xs text-[var(--foreground)] focus:outline-hidden focus:ring-1 focus:ring-[var(--accent)]"
             >
               <option value="all">All Kinds</option>
-              <option value="ncert_pdf">NCERT Textbook</option>
+              <option value="ncert_pdf">Textbook PDF</option>
               <option value="ppt">Presentation (PPT)</option>
               <option value="ppt_pdf">PPT Preview (PDF)</option>
               <option value="teacher_notes">Teacher Notes</option>
@@ -845,7 +845,7 @@ export default function AdminDashboardPage() {
           <h3 className="text-base font-semibold text-[var(--foreground)]">No Matching Chapters or Files</h3>
           <p className="text-xs text-[var(--muted)] mt-1 max-w-sm mx-auto">
             {chapters.length === 0
-              ? "The database is empty. Upload your first NCERT chapter using the upload engine."
+              ? "The database is empty. Upload your first chapter using the upload engine."
               : "No materials match your active filter settings. Try resetting filters or searching for another keyword."}
           </p>
           <div className="mt-4">
@@ -1140,7 +1140,7 @@ export default function AdminDashboardPage() {
             <div>
               <h3 className="text-lg font-bold text-[var(--foreground)]">Upload SST Material</h3>
               <p className="text-xs text-[var(--muted)] mt-1">
-                Upload NCERT chapter PDFs, PPTX slides, or Teacher Notes with automatic chunking & Telegram sync.
+                Upload chapter textbook PDFs, PPTX slides, or Teacher Notes with automatic chunking & Telegram sync.
               </p>
             </div>
 
@@ -1255,7 +1255,7 @@ export default function AdminDashboardPage() {
                   }
                   className="w-full px-2.5 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--background)] text-xs text-[var(--foreground)] focus:outline-hidden focus:ring-1 focus:ring-[var(--accent)]"
                 >
-                  <option value="ncert_pdf">NCERT Official PDF</option>
+                  <option value="ncert_pdf">Official Textbook PDF</option>
                   <option value="ppt">Presentation Slides (.pptx)</option>
                   <option value="teacher_notes">Teacher Notes / Summary</option>
                 </select>

@@ -38,3 +38,4 @@ next-env.d.ts
 
 .vercel
 .env*
+/sst_library_design_assets/

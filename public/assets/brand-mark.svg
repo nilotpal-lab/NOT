@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+<defs>
+  <linearGradient id="globe" x1="27" y1="15" x2="91" y2="82" gradientUnits="userSpaceOnUse"><stop stop-color="#55D7F2"/><stop offset="0.52" stop-color="#3B82F6"/><stop offset="1" stop-color="#3730A3"/></linearGradient>
+  <linearGradient id="bookL" x1="20" y1="75" x2="63" y2="112" gradientUnits="userSpaceOnUse"><stop stop-color="#FFFFFF"/><stop offset="1" stop-color="#DDEBFF"/></linearGradient>
+  <linearGradient id="bookR" x1="65" y1="75" x2="108" y2="112" gradientUnits="userSpaceOnUse"><stop stop-color="#EEF5FF"/><stop offset="1" stop-color="#C7D2FE"/></linearGradient>
+</defs>
+<circle cx="64" cy="48" r="35" fill="url(#globe)"/>
+<g stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity=".95">
+ <path d="M29.5 48H98.5M35 32.5C51 40 77 40 93 32.5M35 63.5C51 56 77 56 93 63.5"/>
+ <path d="M64 13C50 24 47 38 47 48S50 72 64 83M64 13C78 24 81 38 81 48S78 72 64 83"/>
+</g>
+<path d="M10 76.5C27 69 44 72 62 84V112C44 100 27 98 10 106V76.5Z" fill="url(#bookL)" stroke="#4F73E8" stroke-width="3" stroke-linejoin="round"/>
+<path d="M118 76.5C101 69 84 72 66 84V112C84 100 101 98 118 106V76.5Z" fill="url(#bookR)" stroke="#4F73E8" stroke-width="3" stroke-linejoin="round"/>
+<path d="M64 84V113" stroke="#4F73E8" stroke-width="3" stroke-linecap="round"/>
+<path d="M18 83C30 80 42 82 54 89M18 91C30 88 42 90 54 97M110 83C98 80 86 82 74 89M110 91C98 88 86 90 74 97" stroke="#92B4F5" stroke-width="2" stroke-linecap="round"/>
+</svg>
