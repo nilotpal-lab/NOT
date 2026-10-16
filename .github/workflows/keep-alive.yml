@@ -1,0 +1,23 @@
+name: Keep Supabase Active
+
+on:
+  schedule:
+    # Runs every 2 days at midnight UTC to prevent Supabase 7-day inactivity pause
+    - cron: '0 0 */2 * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  ping-health:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping SST Library API Health
+        run: |
+          echo "Pinging Vercel deployment to keep database warm..."
+          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" https://notsy-alpha.vercel.app/api/health)
+          echo "$RESPONSE"
+          STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d':' -f2)
+          if [ "$STATUS" -ne 200 ]; then
+            echo "Health check failed with status $STATUS"
+            exit 1
+          fi
+          echo "Successfully refreshed Supabase activity!"
