@@ -190,52 +190,13 @@ export function FloatingTutor({
             className="group relative flex items-center gap-3 p-2 pr-4 rounded-full bg-gradient-to-r from-[var(--primary)] to-[#4f46e5] text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer border-2 border-white/40"
             aria-label="Open AI SST Tutor"
           >
-            {/* Cute Indian Traditional Male Character Avatar SVG */}
-            <div className="w-12 h-12 rounded-full overflow-hidden bg-[#fef3c7] border-2 border-white shadow-xs shrink-0 flex items-center justify-center relative">
-              <svg viewBox="0 0 100 100" className="w-full h-full">
-                {/* Background circle warm wash */}
-                <circle cx="50" cy="50" r="48" fill="#fde68a" />
-
-                {/* Kurta Collar & Saffron/Mustard Nehru Jacket */}
-                <path d="M20 95 Q50 82 80 95 L85 100 L15 100 Z" fill="#d97706" />
-                <path d="M35 75 L50 88 L65 75 L75 100 L25 100 Z" fill="#b45309" />
-                {/* White Kurta Neckband */}
-                <path d="M42 68 L50 78 L58 68 Z" fill="#ffffff" />
-                {/* Traditional Tilak / Tika */}
-                <circle cx="50" cy="40" r="2.5" fill="#dc2626" />
-
-                {/* Head & Face */}
-                <circle cx="50" cy="50" r="22" fill="#fed7aa" />
-
-                {/* Neatly combed dark hair */}
-                <path
-                  d="M28 46 C28 28 72 28 72 46 C72 34 62 26 50 26 C38 26 28 34 28 46 Z"
-                  fill="#1f2937"
-                />
-
-                {/* Expressive big friendly eyes */}
-                <circle cx="43" cy="48" r="2.5" fill="#111827" />
-                <circle cx="57" cy="48" r="2.5" fill="#111827" />
-                {/* Eye twinkle highlights */}
-                <circle cx="44" cy="47" r="0.8" fill="#ffffff" />
-                <circle cx="58" cy="47" r="0.8" fill="#ffffff" />
-
-                {/* Eyebrows */}
-                <path d="M39 43 Q43 41 47 43" stroke="#1f2937" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-                <path d="M53 43 Q57 41 61 43" stroke="#1f2937" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-
-                {/* Gentle smile */}
-                <path
-                  d="M44 56 Q50 62 56 56"
-                  stroke="#9a3412"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  fill="none"
-                />
-
-                {/* Traditional Angavastram / Saffron stole on left shoulder */}
-                <path d="M28 85 Q35 72 45 80 L42 100 L22 100 Z" fill="#ea580c" />
-              </svg>
+            {/* Cute Indian Traditional Character Avatar */}
+            <div className="w-12 h-12 rounded-full overflow-hidden bg-black border-2 border-white shadow-md shrink-0 flex items-center justify-center relative">
+              <img
+                src="/tutor-avatar.jpg"
+                alt="SST Study Buddy"
+                className="w-full h-full object-cover object-top"
+              />
             </div>
 
             <div className="text-left hidden sm:block">
@@ -260,29 +221,12 @@ export function FloatingTutor({
           {/* Header Bar */}
           <div className="px-5 py-3.5 bg-gradient-to-r from-[var(--primary)] to-[#4f46e5] text-white flex items-center justify-between shadow-xs">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full overflow-hidden bg-[#fef3c7] border border-white/60 shrink-0">
-                <svg viewBox="0 0 100 100" className="w-full h-full">
-                  <circle cx="50" cy="50" r="48" fill="#fde68a" />
-                  <path d="M20 95 Q50 82 80 95 L85 100 L15 100 Z" fill="#d97706" />
-                  <path d="M35 75 L50 88 L65 75 L75 100 L25 100 Z" fill="#b45309" />
-                  <path d="M42 68 L50 78 L58 68 Z" fill="#ffffff" />
-                  <circle cx="50" cy="40" r="2.5" fill="#dc2626" />
-                  <circle cx="50" cy="50" r="22" fill="#fed7aa" />
-                  <path
-                    d="M28 46 C28 28 72 28 72 46 C72 34 62 26 50 26 C38 26 28 34 28 46 Z"
-                    fill="#1f2937"
-                  />
-                  <circle cx="43" cy="48" r="2.5" fill="#111827" />
-                  <circle cx="57" cy="48" r="2.5" fill="#111827" />
-                  <path
-                    d="M44 56 Q50 62 56 56"
-                    stroke="#9a3412"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    fill="none"
-                  />
-                  <path d="M28 85 Q35 72 45 80 L42 100 L22 100 Z" fill="#ea580c" />
-                </svg>
+              <div className="w-9 h-9 rounded-full overflow-hidden bg-black border border-white/80 shrink-0 flex items-center justify-center shadow-xs">
+                <img
+                  src="/tutor-avatar.jpg"
+                  alt="SST Study Buddy"
+                  className="w-full h-full object-cover object-top"
+                />
               </div>
               <div>
                 <h4 className="text-sm font-bold tracking-tight">SST AI Study Buddy</h4>
@@ -331,10 +275,19 @@ export function FloatingTutor({
             {messages.map((m, idx) => (
               <div
                 key={idx}
-                className={`flex ${m.sender === "user" ? "justify-end" : "justify-start"}`}
+                className={`flex gap-2 items-start ${m.sender === "user" ? "justify-end" : "justify-start"}`}
               >
+                {m.sender === "bot" && (
+                  <div className="w-6 h-6 rounded-full overflow-hidden bg-black border border-[var(--border)] shrink-0 mt-0.5 shadow-xs">
+                    <img
+                      src="/tutor-avatar.jpg"
+                      alt="SST Buddy"
+                      className="w-full h-full object-cover object-top"
+                    />
+                  </div>
+                )}
                 <div
-                  className={`max-w-[85%] px-3.5 py-2.5 rounded-2xl whitespace-pre-wrap leading-relaxed ${
+                  className={`max-w-[82%] px-3.5 py-2.5 rounded-2xl whitespace-pre-wrap leading-relaxed ${
                     m.sender === "user"
                       ? "bg-[var(--primary)] text-white rounded-br-xs shadow-xs"
                       : "bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] shadow-xs rounded-bl-xs"
@@ -349,7 +302,14 @@ export function FloatingTutor({
               </div>
             ))}
             {loading && (
-              <div className="flex justify-start">
+              <div className="flex gap-2 items-center justify-start">
+                <div className="w-6 h-6 rounded-full overflow-hidden bg-black border border-[var(--border)] shrink-0 shadow-xs">
+                  <img
+                    src="/tutor-avatar.jpg"
+                    alt="SST Buddy"
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
                 <div className="px-3.5 py-2 rounded-2xl bg-[var(--card)] border border-[var(--border)] text-[var(--muted-foreground)] text-xs flex items-center gap-1.5 shadow-xs">
                   <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)] animate-bounce"></span>
                   <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)] animate-bounce [animation-delay:0.2s]"></span>
