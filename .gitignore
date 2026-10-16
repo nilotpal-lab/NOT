@@ -5,6 +5,8 @@
 
 # Testing
 /coverage
+/playwright-report/
+/test-results/
 
 # Next.js
 /.next/
@@ -29,5 +31,7 @@
 *.tsbuildinfo
 next-env.d.ts
 
-# Backups
+# Backups & Agent Scratch
 /backups/
+/.agents-freebuff-backup*
+/scripts/scratch/

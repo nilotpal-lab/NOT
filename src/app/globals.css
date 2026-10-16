@@ -1,36 +1,85 @@
 @import "tailwindcss";
 
-:root {
-  --background: #fbf9f5;
-  --foreground: #2d3748;
-  --card-bg: #ffffff;
-  --border-color: #e2e8f0;
-  --accent: #2e7d6b;
-  --accent-hover: #246456;
-  --muted: #718096;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #18191a;
-    --foreground: #e4e6eb;
-    --card-bg: #242526;
-    --border-color: #3a3b3c;
-    --accent: #38a189;
-    --accent-hover: #48bb9f;
-    --muted: #a0aec0;
+    /* Soft Pop Theme - Light & Vibrant Academic */
+    --background: #f7f9fd;
+    --foreground: #1e2532;
+    --card: #ffffff;
+    --card-foreground: #1e2532;
+    --popover: #ffffff;
+    --popover-foreground: #1e2532;
+
+    /* Primary Soft Pop: Vibrant periwinkle / soft indigo */
+    --primary: #6c72f8;
+    --primary-foreground: #ffffff;
+    --primary-hover: #5a60e6;
+
+    /* Secondary Soft Pop: Cheerful Mint / Cyan */
+    --secondary: #2dd4bf;
+    --secondary-foreground: #093730;
+
+    /* Accent Soft Pop: Sunny Amber / Gold */
+    --accent: #fbbf24;
+    --accent-foreground: #78350f;
+
+    /* Muted & Neutral */
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+
+    /* Destructive Soft Pop: Coral Rose */
+    --destructive: #f87171;
+    --destructive-foreground: #ffffff;
+
+    /* Borders & Radius */
+    --border: #e2e8f0;
+    --input: #e2e8f0;
+    --ring: #6c72f8;
+    --radius: 1rem;
+  }
+
+  .dark,
+  @media (prefers-color-scheme: dark) {
+    :root {
+      /* Soft Pop Theme - Dark Mode (Deep slate canvas with radiant soft pop pills) */
+      --background: #0f131a;
+      --foreground: #f1f5f9;
+      --card: #171d27;
+      --card-foreground: #f1f5f9;
+      --popover: #171d27;
+      --popover-foreground: #f1f5f9;
+
+      --primary: #757bff;
+      --primary-foreground: #ffffff;
+      --primary-hover: #898eff;
+
+      --secondary: #2dd4bf;
+      --secondary-foreground: #072823;
+
+      --accent: #fcd34d;
+      --accent-foreground: #451a03;
+
+      --muted: #212936;
+      --muted-foreground: #94a3b8;
+
+      --destructive: #f87171;
+      --destructive-foreground: #ffffff;
+
+      --border: #283344;
+      --input: #283344;
+      --ring: #757bff;
+    }
   }
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-size: 17px;
-  line-height: 1.6;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-dm-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  min-height: 100vh;
   margin: 0;
   padding: 0;
-  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Reduced motion preference */

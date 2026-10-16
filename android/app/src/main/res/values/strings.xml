@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">SST Library</string>
+    <string name="title_activity_main">SST Library</string>
+    <string name="package_name">com.sstlibrary.app</string>
+    <string name="custom_url_scheme">com.sstlibrary.app</string>
+</resources>

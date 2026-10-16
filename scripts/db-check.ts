@@ -222,14 +222,99 @@ async function main() {
     });
   }
 
+  // 5.2 Unique Constraint: files(chapter_id, sha256) and files(file_name)
+  const tempChap = await db.from("chapters").insert({
+    class: 6,
+    subject: "Geography",
+    chapter_no: 99,
+    title: "Temp Chapter For File Unique Check",
+  }).select("id").single();
+
+  if (tempChap.data?.id) {
+    const chapId = tempChap.data.id;
+    const f1 = await db.from("files").insert({
+      chapter_id: chapId,
+      kind: "ncert_pdf",
+      file_name: "Unique_Test_Class6_Geography_Ch99_NCERT.pdf",
+      size_bytes: 1024,
+      mime: "application/pdf",
+      sha256: "test_sha256_unique_1",
+    }).select("id").single();
+
+    if (f1.data?.id) {
+      // Test duplicate (chapter_id, sha256) with different file_name
+      const dupSha = await db.from("files").insert({
+        chapter_id: chapId,
+        kind: "ncert_pdf",
+        file_name: "Unique_Test_Different_Name.pdf",
+        size_bytes: 1024,
+        mime: "application/pdf",
+        sha256: "test_sha256_unique_1",
+      });
+      checks.push({
+        name: "files unique (chapter_id, sha256)",
+        type: "UNIQUE_CONSTRAINT",
+        passed: dupSha.error?.code === "23505",
+        details: dupSha.error?.message || "Unique constraint not enforced",
+      });
+
+      // Test duplicate file_name with different sha256
+      const dupName = await db.from("files").insert({
+        chapter_id: chapId,
+        kind: "ncert_pdf",
+        file_name: "Unique_Test_Class6_Geography_Ch99_NCERT.pdf",
+        size_bytes: 2048,
+        mime: "application/pdf",
+        sha256: "test_sha256_unique_2",
+      });
+      checks.push({
+        name: "files unique (file_name)",
+        type: "UNIQUE_CONSTRAINT",
+        passed: dupName.error?.code === "23505",
+        details: dupName.error?.message || "Unique constraint not enforced",
+      });
+
+      // Cleanup
+      await db.from("files").delete().eq("id", f1.data.id);
+    } else {
+      checks.push({
+        name: "files unique (chapter_id, sha256)",
+        type: "UNIQUE_CONSTRAINT",
+        passed: false,
+        details: "Could not insert base test file",
+      });
+      checks.push({
+        name: "files unique (file_name)",
+        type: "UNIQUE_CONSTRAINT",
+        passed: false,
+        details: "Could not insert base test file",
+      });
+    }
+
+    await db.from("chapters").delete().eq("id", chapId);
+  }
+
   // 6. GIN Trigram & Index Verification
-  const trgmTest = await db.from("chapters").select("id").ilike("title", "%Test%");
+  const trgmChapters = await db.from("chapters").select("id").ilike("title", "%Test%");
   checks.push({
     name: "chapters_title_trgm (GIN index)",
     type: "INDEX",
-    passed: !trgmTest.error,
-    details: !trgmTest.error ? "pg_trgm trigram index operational" : trgmTest.error.message,
+    passed: !trgmChapters.error,
+    details: !trgmChapters.error ? "pg_trgm trigram index operational" : trgmChapters.error.message,
   });
+
+  const trgmFiles = await db.from("files").select("id").ilike("file_name", "%Test%");
+  checks.push({
+    name: "files_name_trgm (GIN index)",
+    type: "INDEX",
+    passed: !trgmFiles.error,
+    details: !trgmFiles.error ? "pg_trgm trigram index operational on files" : trgmFiles.error.message,
+  });
+
+  // 7. Query Current Database Row Counts
+  const { count: chaptersCount, error: chCountErr } = await db.from("chapters").select("*", { count: "exact", head: true });
+  const { count: filesCount, error: fCountErr } = await db.from("files").select("*", { count: "exact", head: true });
+  const { count: filePartsCount, error: fpCountErr } = await db.from("file_parts").select("*", { count: "exact", head: true });
 
   // Print Results Table
   console.log("| Type               | Constraint / Index Name                  | Status     | Details");
@@ -239,6 +324,11 @@ async function main() {
     console.log(`| ${c.type.padEnd(18)} | ${c.name.padEnd(40)} | ${statusFormatted} | ${c.details.substring(0, 40)}`);
   }
   console.log("=======================================================\n");
+
+  console.log("--> Current Database Table Row Counts:");
+  console.log(`    - chapters:   ${chCountErr ? `ERROR: ${chCountErr.message}` : chaptersCount ?? 0} row(s)`);
+  console.log(`    - files:      ${fCountErr ? `ERROR: ${fCountErr.message}` : filesCount ?? 0} row(s)`);
+  console.log(`    - file_parts: ${fpCountErr ? `ERROR: ${fpCountErr.message}` : filePartsCount ?? 0} row(s)\n`);
 
   const allPassed = checks.every((c) => c.passed);
   if (allPassed) {

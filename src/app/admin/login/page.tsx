@@ -50,8 +50,7 @@ function LoginForm() {
       }
 
       // Successful login -> Redirect to destination
-      router.push(fromUrl);
-      router.refresh();
+      window.location.href = fromUrl;
     } catch {
       setError("Network error. Please check your connection and try again.");
     } finally {
@@ -121,6 +120,7 @@ function LoginForm() {
             <div className="relative">
               <input
                 id="admin-password"
+                data-testid="admin-password-input"
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -143,6 +143,7 @@ function LoginForm() {
 
           <button
             type="submit"
+            data-testid="login-submit-button"
             disabled={loading || !password.trim()}
             className="w-full py-2.5 px-4 rounded-lg bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white font-medium text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer shadow-xs"
           >

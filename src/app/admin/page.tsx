@@ -32,6 +32,22 @@ interface DeleteModalState {
   error?: string | null;
 }
 
+interface UploadModalState {
+  isOpen: boolean;
+  classNum: number;
+  subject: string;
+  chapterNo: number;
+  title: string;
+  kind: "ncert_pdf" | "ppt" | "teacher_notes";
+  teacherName: string;
+  file: File | null;
+  accompanyingPdf: File | null;
+  uploading: boolean;
+  progressMessage: string;
+  progressPercent: number;
+  error?: string | null;
+}
+
 function getSubjectColor(subject: string): string {
   switch (subject) {
     case "History":
@@ -125,6 +141,22 @@ export default function AdminDashboardPage() {
     fileName: "",
     partCount: 1,
     deleting: false,
+  });
+
+  const [uploadModal, setUploadModal] = useState<UploadModalState>({
+    isOpen: false,
+    classNum: 7,
+    subject: "Geography",
+    chapterNo: 2,
+    title: "Inside Our Earth",
+    kind: "ncert_pdf",
+    teacherName: "",
+    file: null,
+    accompanyingPdf: null,
+    uploading: false,
+    progressMessage: "",
+    progressPercent: 0,
+    error: null,
   });
 
   const [bulkProcessing, setBulkProcessing] = useState(false);
@@ -345,6 +377,125 @@ export default function AdminDashboardPage() {
     }
   }
 
+  // Upload Material Submission (with Browser Slicing)
+  async function handleUploadSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!uploadModal.file || uploadModal.uploading) return;
+
+    setUploadModal((prev) => ({
+      ...prev,
+      uploading: true,
+      error: null,
+      progressPercent: 0,
+      progressMessage: "Preparing file upload...",
+    }));
+
+    try {
+      const file = uploadModal.file;
+      // Allow tiny chunk size when testing
+      const testChunkSize =
+        typeof window !== "undefined" && (window as unknown as { __TEST_CHUNK_SIZE?: number }).__TEST_CHUNK_SIZE;
+      const CHUNK_SIZE = testChunkSize || (19 * 1024 * 1024);
+
+      const totalParts = Math.max(1, Math.ceil(file.size / CHUNK_SIZE));
+      const uploadId = `upload_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+
+      // Upload parts sequentially
+      for (let part = 1; part <= totalParts; part++) {
+        const start = (part - 1) * CHUNK_SIZE;
+        const end = Math.min(file.size, start + CHUNK_SIZE);
+        const chunkBlob = file.slice(start, end);
+
+        setUploadModal((prev) => ({
+          ...prev,
+          progressMessage: `Uploading ${file.name} (part ${part} of ${totalParts})...`,
+          progressPercent: Math.round(((part - 1) / totalParts) * 85),
+        }));
+
+        const formData = new FormData();
+        formData.append("uploadId", uploadId);
+        formData.append("part", String(part));
+        formData.append("total", String(totalParts));
+        formData.append("fileName", file.name);
+        formData.append("class", String(uploadModal.classNum));
+        formData.append("subject", uploadModal.subject);
+        formData.append("chapterNo", String(uploadModal.chapterNo));
+        formData.append("title", uploadModal.title.trim());
+        formData.append("kind", uploadModal.kind);
+        formData.append("chunk", chunkBlob, file.name);
+
+        const partRes = await fetch("/api/admin/upload/part", {
+          method: "POST",
+          headers: {
+            origin: window.location.origin,
+          },
+          body: formData,
+        });
+
+        if (!partRes.ok) {
+          const errJson = await partRes.json().catch(() => ({}));
+          throw new Error(
+            errJson.error || `Upload failed on part ${part}/${totalParts} (HTTP ${partRes.status})`
+          );
+        }
+      }
+
+      setUploadModal((prev) => ({
+        ...prev,
+        progressMessage: "Finalizing and indexing material in Supabase & Telegram...",
+        progressPercent: 95,
+      }));
+
+      // Complete upload session
+      const completeRes = await fetch("/api/admin/upload/complete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          origin: window.location.origin,
+        },
+        body: JSON.stringify({
+          uploadId,
+          class: Number(uploadModal.classNum),
+          subject: uploadModal.subject,
+          chapterNo: Number(uploadModal.chapterNo),
+          title: uploadModal.title.trim(),
+          kind: uploadModal.kind,
+          teacherName: uploadModal.kind === "teacher_notes" ? uploadModal.teacherName.trim() : undefined,
+          hasAccompanyingPdf: Boolean(uploadModal.accompanyingPdf),
+        }),
+      });
+
+      if (!completeRes.ok) {
+        const completeJson = await completeRes.json().catch(() => ({}));
+        throw new Error(
+          completeJson.error || `Failed to finalize upload (HTTP ${completeRes.status})`
+        );
+      }
+
+      const completeData = await completeRes.json();
+      const finalFileName = completeData.file?.file_name || file.name;
+
+      showToast(`Successfully uploaded ${finalFileName}!`, "success");
+      setUploadModal((prev) => ({
+        ...prev,
+        isOpen: false,
+        uploading: false,
+        progressMessage: "",
+        progressPercent: 0,
+        file: null,
+        accompanyingPdf: null,
+      }));
+
+      await fetchLibrary();
+    } catch (err) {
+      setUploadModal((prev) => ({
+        ...prev,
+        uploading: false,
+        error: err instanceof Error ? err.message : "Upload failed",
+      }));
+    }
+  }
+
   // Filtered Chapters & Files
   const filteredChapters = useMemo(() => {
     return chapters
@@ -460,6 +611,16 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className="flex items-center gap-2.5 shrink-0">
+          <button
+            data-testid="open-upload-modal-btn"
+            onClick={() => setUploadModal((prev) => ({ ...prev, isOpen: true }))}
+            className="px-3.5 py-1.5 rounded-lg bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer flex items-center gap-1.5"
+          >
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Upload Material
+          </button>
           <Link
             href="/"
             className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] text-xs font-medium hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
@@ -687,6 +848,18 @@ export default function AdminDashboardPage() {
               ? "The database is empty. Upload your first NCERT chapter using the upload engine."
               : "No materials match your active filter settings. Try resetting filters or searching for another keyword."}
           </p>
+          <div className="mt-4">
+            <button
+              data-testid="empty-upload-btn"
+              onClick={() => setUploadModal((prev) => ({ ...prev, isOpen: true }))}
+              className="px-4 py-2 rounded-lg bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer inline-flex items-center gap-1.5"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Upload Chapter Material
+            </button>
+          </div>
         </div>
       )}
 
@@ -802,10 +975,14 @@ export default function AdminDashboardPage() {
                             {files.map((file: FileRecord) => (
                               <tr
                                 key={file.id}
+                                data-testid={`file-row-${file.id}`}
                                 className="hover:bg-black/[0.015] dark:hover:bg-white/[0.015] transition-colors"
                               >
                                 {/* File Name */}
-                                <td className="py-3 px-4 font-mono text-[11px] text-[var(--foreground)] max-w-xs sm:max-w-md truncate">
+                                <td
+                                  data-testid="file-name-cell"
+                                  className="py-3 px-4 font-mono text-[11px] text-[var(--foreground)] max-w-xs sm:max-w-md truncate"
+                                >
                                   {file.file_name}
                                 </td>
 
@@ -850,6 +1027,7 @@ export default function AdminDashboardPage() {
                                 {/* Actions */}
                                 <td className="py-3 px-4 text-right whitespace-nowrap">
                                   <button
+                                    data-testid={`delete-file-btn-${file.id}`}
                                     onClick={() =>
                                       setDeleteModal({
                                         isOpen: true,
@@ -951,6 +1129,196 @@ export default function AdminDashboardPage() {
         </div>
       )}
 
+      {/* Upload Material Modal */}
+      {uploadModal.isOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in"
+        >
+          <div className="w-full max-w-lg p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div>
+              <h3 className="text-lg font-bold text-[var(--foreground)]">Upload SST Material</h3>
+              <p className="text-xs text-[var(--muted)] mt-1">
+                Upload NCERT chapter PDFs, PPTX slides, or Teacher Notes with automatic chunking & Telegram sync.
+              </p>
+            </div>
+
+            {uploadModal.error && (
+              <div
+                data-testid="upload-error-banner"
+                className="p-2.5 rounded bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 text-xs"
+              >
+                {uploadModal.error}
+              </div>
+            )}
+
+            {uploadModal.uploading && (
+              <div className="p-3 rounded-lg border border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/30 space-y-2">
+                <div className="flex items-center justify-between text-xs text-blue-800 dark:text-blue-300 font-medium">
+                  <span data-testid="upload-progress-status">{uploadModal.progressMessage}</span>
+                  <span>{uploadModal.progressPercent}%</span>
+                </div>
+                <div className="w-full bg-blue-200 dark:bg-blue-900/60 rounded-full h-2 overflow-hidden">
+                  <div
+                    className="bg-[var(--accent)] h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${uploadModal.progressPercent}%` }}
+                  ></div>
+                </div>
+              </div>
+            )}
+
+            <form onSubmit={handleUploadSubmit} className="space-y-3.5">
+              <div className="grid grid-cols-2 gap-3">
+                {/* Class */}
+                <div>
+                  <label className="block text-xs font-medium text-[var(--foreground)] mb-1">Class</label>
+                  <select
+                    data-testid="upload-class-select"
+                    disabled={uploadModal.uploading}
+                    value={uploadModal.classNum}
+                    onChange={(e) => setUploadModal((prev) => ({ ...prev, classNum: Number(e.target.value) }))}
+                    className="w-full px-2.5 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--background)] text-xs text-[var(--foreground)] focus:outline-hidden focus:ring-1 focus:ring-[var(--accent)]"
+                  >
+                    <option value={6}>Class 6</option>
+                    <option value={7}>Class 7</option>
+                    <option value={8}>Class 8</option>
+                    <option value={9}>Class 9</option>
+                    <option value={10}>Class 10</option>
+                  </select>
+                </div>
+
+                {/* Subject */}
+                <div>
+                  <label className="block text-xs font-medium text-[var(--foreground)] mb-1">Subject</label>
+                  <select
+                    data-testid="upload-subject-select"
+                    disabled={uploadModal.uploading}
+                    value={uploadModal.subject}
+                    onChange={(e) => setUploadModal((prev) => ({ ...prev, subject: e.target.value }))}
+                    className="w-full px-2.5 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--background)] text-xs text-[var(--foreground)] focus:outline-hidden focus:ring-1 focus:ring-[var(--accent)]"
+                  >
+                    <option value="History">History</option>
+                    <option value="Geography">Geography</option>
+                    <option value="Civics">Civics</option>
+                    <option value="Economics">Economics</option>
+                    <option value="SocialScience">Social Science</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                {/* Chapter Number */}
+                <div className="col-span-1">
+                  <label className="block text-xs font-medium text-[var(--foreground)] mb-1">Chapter No</label>
+                  <input
+                    type="number"
+                    min={1}
+                    max={99}
+                    required
+                    data-testid="upload-chapterno-input"
+                    disabled={uploadModal.uploading}
+                    value={uploadModal.chapterNo}
+                    onChange={(e) => setUploadModal((prev) => ({ ...prev, chapterNo: Number(e.target.value) }))}
+                    className="w-full px-2.5 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--background)] text-xs text-[var(--foreground)] focus:outline-hidden focus:ring-1 focus:ring-[var(--accent)]"
+                  />
+                </div>
+
+                {/* Chapter Title */}
+                <div className="col-span-2">
+                  <label className="block text-xs font-medium text-[var(--foreground)] mb-1">Chapter Title</label>
+                  <input
+                    type="text"
+                    required
+                    data-testid="upload-title-input"
+                    disabled={uploadModal.uploading}
+                    placeholder="e.g. Inside Our Earth"
+                    value={uploadModal.title}
+                    onChange={(e) => setUploadModal((prev) => ({ ...prev, title: e.target.value }))}
+                    className="w-full px-2.5 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--background)] text-xs text-[var(--foreground)] focus:outline-hidden focus:ring-1 focus:ring-[var(--accent)]"
+                  />
+                </div>
+              </div>
+
+              {/* Material Kind */}
+              <div>
+                <label className="block text-xs font-medium text-[var(--foreground)] mb-1">Material Kind</label>
+                <select
+                  data-testid="upload-kind-select"
+                  disabled={uploadModal.uploading}
+                  value={uploadModal.kind}
+                  onChange={(e) =>
+                    setUploadModal((prev) => ({
+                      ...prev,
+                      kind: e.target.value as "ncert_pdf" | "ppt" | "teacher_notes",
+                    }))
+                  }
+                  className="w-full px-2.5 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--background)] text-xs text-[var(--foreground)] focus:outline-hidden focus:ring-1 focus:ring-[var(--accent)]"
+                >
+                  <option value="ncert_pdf">NCERT Official PDF</option>
+                  <option value="ppt">Presentation Slides (.pptx)</option>
+                  <option value="teacher_notes">Teacher Notes / Summary</option>
+                </select>
+              </div>
+
+              {/* Teacher Name (Optional if Teacher Notes) */}
+              {uploadModal.kind === "teacher_notes" && (
+                <div>
+                  <label className="block text-xs font-medium text-[var(--foreground)] mb-1">Teacher / Author Name</label>
+                  <input
+                    type="text"
+                    data-testid="upload-teacher-input"
+                    disabled={uploadModal.uploading}
+                    placeholder="e.g. Sharma Sir"
+                    value={uploadModal.teacherName}
+                    onChange={(e) => setUploadModal((prev) => ({ ...prev, teacherName: e.target.value }))}
+                    className="w-full px-2.5 py-2 rounded-lg border border-[var(--border-color)] bg-[var(--background)] text-xs text-[var(--foreground)] focus:outline-hidden focus:ring-1 focus:ring-[var(--accent)]"
+                  />
+                </div>
+              )}
+
+              {/* Primary File Input */}
+              <div>
+                <label className="block text-xs font-medium text-[var(--foreground)] mb-1">
+                  Primary File {uploadModal.kind === "ppt" ? "(.pptx)" : "(.pdf)"}
+                </label>
+                <input
+                  type="file"
+                  required
+                  data-testid="upload-file-input"
+                  disabled={uploadModal.uploading}
+                  accept={uploadModal.kind === "ppt" ? ".pptx,application/vnd.openxmlformats-officedocument.presentationml.presentation" : ".pdf,application/pdf"}
+                  onChange={(e) => {
+                    const f = e.target.files?.[0] || null;
+                    setUploadModal((prev) => ({ ...prev, file: f }));
+                  }}
+                  className="w-full text-xs text-[var(--muted)] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border file:border-[var(--border-color)] file:text-xs file:font-semibold file:bg-black/5 dark:file:bg-white/5 file:text-[var(--foreground)] hover:file:bg-black/10 cursor-pointer"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[var(--border-color)]">
+                <button
+                  type="button"
+                  disabled={uploadModal.uploading}
+                  onClick={() => setUploadModal((prev) => ({ ...prev, isOpen: false }))}
+                  className="px-4 py-2 rounded-lg border border-[var(--border-color)] text-xs font-medium hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  data-testid="upload-submit-btn"
+                  disabled={uploadModal.uploading || !uploadModal.file}
+                  className="px-4 py-2 rounded-lg bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-medium transition-colors disabled:opacity-50 cursor-pointer flex items-center gap-1.5 shadow-xs"
+                >
+                  {uploadModal.uploading ? "Uploading Chunks..." : "Start Upload"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Delete Confirmation Modal */}
       {deleteModal.isOpen && (
         <div
@@ -990,6 +1358,7 @@ export default function AdminDashboardPage() {
               </button>
               <button
                 type="button"
+                data-testid="confirm-delete-btn"
                 disabled={deleteModal.deleting}
                 onClick={submitDeleteFile}
                 className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-medium transition-colors disabled:opacity-50 cursor-pointer flex items-center gap-1.5"

@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: sst-chapter-library
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHANNEL_ID
+        sync: false
+      - key: ADMIN_PASSWORD_HASH
+        sync: false
+      - key: SESSION_SECRET
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-20b
+      - key: GROQ_FALLBACK_MODEL
+        value: qwen/qwen3.8-27b
+      - key: SITE_URL
+        sync: false
+      - key: MAX_FILE_MB
+        value: "100"
+      - key: UPLOAD_SESSION_TTL_MINUTES
+        value: "30"
