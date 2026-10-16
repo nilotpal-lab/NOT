@@ -4,14 +4,15 @@ import "./globals.css";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
   variable: "--font-dm-sans",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "SST Chapter Library — NCERT Resources",
-  description: "Browse NCERT Social Science chapter notes, textbook PDFs, and presentations for Classes 6 to 10.",
+  title: "SST Library — NCERT Social Science Classes 6–10",
+  description:
+    "Browse NCERT Social Science chapter notes, textbook PDFs, and presentations for Classes 6 to 10.",
 };
 
 export default function RootLayout({
@@ -21,43 +22,53 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={dmSans.variable}>
-      <body className="min-h-screen flex flex-col font-sans bg-[var(--background)] text-[var(--foreground)] antialiased selection:bg-[var(--primary)] selection:text-white">
-        <header className="border-b border-[var(--border)] bg-[var(--card)]/90 backdrop-blur-md px-4 py-3 sticky top-0 z-40 shadow-xs transition-colors">
-          <div className="max-w-5xl mx-auto flex items-center justify-between">
+      <body className="min-h-screen flex flex-col font-sans bg-[var(--page-bg)] text-[var(--foreground)] antialiased selection:bg-[var(--primary)] selection:text-white">
+        {/* ── Top Navbar ─────────────────────────────────────────────── */}
+        <header className="bg-white border-b border-[var(--border)] px-4 sm:px-6 py-3 sticky top-0 z-40 shadow-sm">
+          <div className="max-w-6xl mx-auto flex items-center justify-between">
+            {/* Brand */}
             <a href="/" className="flex items-center gap-2.5 group">
-              <span className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center text-white font-bold text-base shadow-sm group-hover:scale-105 transition-transform">
+              <span className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[var(--primary)] to-[#4f46e5] flex items-center justify-center text-white font-bold text-base shadow-sm group-hover:scale-105 transition-transform">
                 📚
               </span>
-              <div>
-                <span className="font-bold text-base sm:text-lg tracking-tight bg-gradient-to-r from-[var(--primary)] to-[#4f46e5] bg-clip-text text-transparent">
+              <div className="flex items-center gap-2">
+                <span className="font-extrabold text-base sm:text-lg tracking-tight text-[var(--foreground)]">
                   SST Library
                 </span>
-                <span className="hidden sm:inline-block text-[11px] font-medium text-[var(--muted-foreground)] ml-2 px-2 py-0.5 rounded-full bg-[var(--muted)]">
-                  Class 6–10 NCERT
+                <span className="hidden sm:inline-flex items-center text-[11px] font-semibold text-[var(--primary)] bg-[var(--primary)]/10 px-2 py-0.5 rounded-full border border-[var(--primary)]/20">
+                  Classes 6–10
                 </span>
               </div>
             </a>
 
-            <nav className="flex items-center gap-3">
+            {/* Nav */}
+            <nav className="flex items-center gap-2">
               <a
                 href="/admin"
-                className="text-xs font-semibold px-3 py-1.5 rounded-full border border-[var(--border)] hover:bg-[var(--muted)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all"
+                className="flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-full border border-[var(--border)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:border-[var(--primary)]/40 hover:bg-[var(--primary)]/5 transition-all"
               >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
                 Teacher Admin
               </a>
             </nav>
           </div>
         </header>
 
-        <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-6 sm:py-8">
+        {/* ── Page Content ────────────────────────────────────────────── */}
+        <main className="flex-1 w-full">
           {children}
         </main>
 
-        <footer className="border-t border-[var(--border)] py-6 text-center text-xs text-[var(--muted-foreground)] bg-[var(--card)]/40 mt-12">
-          <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+        {/* ── Footer ─────────────────────────────────────────────────── */}
+        <footer className="bg-white border-t border-[var(--border)] py-4 mt-8">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[var(--muted-foreground)]">
             <span>Made with ❤️ for NCERT Social Science Study</span>
             <div className="flex items-center gap-4">
-              <a href="/api/health" className="hover:text-[var(--primary)] transition-colors">
+              <a href="/api/health" className="flex items-center gap-1.5 hover:text-[var(--primary)] transition-colors">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>
                 System Status
               </a>
               <span>•</span>

@@ -182,36 +182,61 @@ export function FloatingTutor({
 
   return (
     <>
-      {/* Floating Action Button with Indian Traditional Kurta & Nehru Jacket Avatar */}
+      {/* Floating SST Buddy — Preview Card Style (like reference) */}
       <div className="fixed bottom-5 right-5 z-40">
         {!isOpen && (
-          <button
-            onClick={() => setIsOpen(true)}
-            className="group relative flex items-center gap-3 p-2 pr-4 rounded-full bg-gradient-to-r from-[var(--primary)] to-[#4f46e5] text-white shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer border-2 border-white/40"
-            aria-label="Open AI SST Tutor"
-          >
-            {/* Cute Indian Traditional Character Avatar */}
-            <div className="w-12 h-12 rounded-full overflow-hidden bg-black border-2 border-white shadow-md shrink-0 flex items-center justify-center relative">
-              <img
-                src="/tutor-avatar.jpg"
-                alt="SST Study Buddy"
-                className="w-full h-full object-cover object-top"
-              />
+          <div className="relative bg-white rounded-2xl shadow-2xl border border-[var(--border)] w-64 overflow-hidden">
+            {/* Close / collapse button */}
+            <button
+              onClick={() => setIsOpen(true)}
+              className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[var(--muted)] hover:bg-[var(--border)] flex items-center justify-center text-[var(--muted-foreground)] transition-colors cursor-pointer z-10"
+              aria-label="Open chat"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+
+            {/* Avatar + Buddy name */}
+            <div className="flex items-start gap-3 p-4 pb-3">
+              <div className="w-12 h-12 rounded-xl overflow-hidden bg-black shrink-0 shadow-sm border border-[var(--border)]">
+                <img
+                  src="/tutor-avatar.jpg"
+                  alt="SST Buddy"
+                  className="w-full h-full object-cover object-top"
+                />
+              </div>
+              <div>
+                <div className="font-extrabold text-sm text-[var(--foreground)]">
+                  Ask SST Buddy
+                </div>
+                <div className="text-[11px] text-[var(--muted-foreground)] mt-0.5 leading-snug">
+                  <span className="inline-flex items-center gap-0.5">
+                    <Sparkles className="w-2.5 h-2.5 text-[var(--primary)]" />
+                    Get instant help with chapters, doubts, notes and more!
+                  </span>
+                </div>
+              </div>
             </div>
 
-            <div className="text-left hidden sm:block">
-              <div className="text-xs font-bold flex items-center gap-1 leading-none mb-1">
-                <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-spin [animation-duration:8s]" />
-                Ask SST Buddy
-              </div>
-              <div className="text-[10px] text-white/80 font-medium leading-none">
-                Groq AI • Free NCERT Help
-              </div>
+            {/* Start Chat button */}
+            <div className="px-4 pb-4">
+              <button
+                onClick={() => setIsOpen(true)}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r from-[var(--primary)] to-[#4f46e5] text-white text-xs font-bold shadow-md hover:shadow-lg hover:scale-105 transition-all cursor-pointer active:scale-95"
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                Start Chat
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
             </div>
 
-            {/* Active green pulse dot */}
-            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-emerald-400 border-2 border-white rounded-full"></span>
-          </button>
+            {/* Online indicator */}
+            <span className="absolute top-2 left-3 flex items-center gap-1 text-[10px] font-medium text-emerald-600">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse" />
+              Online
+            </span>
+          </div>
         )}
       </div>
 
