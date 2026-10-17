@@ -186,7 +186,14 @@ export function FloatingTutor({
       {viewState === "welcome" && (
         <aside
           aria-label="Ask SST Buddy Welcome Card"
-          className="fixed bottom-[22px] right-4 sm:right-6 z-40 w-[calc(100vw-32px)] sm:w-[380px] md:w-[410px] min-h-[224px] bg-gradient-to-br from-white via-white to-[#f2f3ff] border border-[#d9defe] rounded-[26px] shadow-[0_20px_60px_rgba(79,70,229,0.16)] flex items-center gap-2 sm:gap-3 p-4 pr-5 pl-0 relative animate-in fade-in slide-in-from-bottom-3 duration-200"
+          className="fixed z-40 w-[calc(100vw-32px)] sm:w-[380px] md:w-[410px] min-h-[224px] bg-gradient-to-br from-white via-white to-[#f2f3ff] border border-[#d9defe] rounded-[26px] shadow-[0_20px_60px_rgba(79,70,229,0.16)] flex items-center gap-2 sm:gap-3 p-4 pr-5 pl-0 animate-in fade-in slide-in-from-bottom-3 duration-200"
+          style={{
+            position: "fixed",
+            right: "24px",
+            bottom: "22px",
+            left: "auto",
+            maxWidth: "calc(100vw - 32px)",
+          }}
         >
           {/* Close button */}
           <button
@@ -235,7 +242,13 @@ export function FloatingTutor({
         <button
           onClick={() => setViewState("welcome")}
           aria-label="Open SST Buddy"
-          className="fixed bottom-[22px] right-4 sm:right-6 z-40 h-[72px] sm:h-[76px] w-[265px] sm:w-[280px] rounded-full bg-gradient-to-r from-[#635bff] to-[#4f46e5] text-white shadow-[0_12px_32px_rgba(99,91,255,0.35)] hover:shadow-[0_16px_40px_rgba(99,91,255,0.45)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-3 px-3.5 cursor-pointer border border-white/20 animate-in fade-in slide-in-from-bottom-2 duration-150"
+          className="fixed z-40 h-[72px] sm:h-[76px] w-[265px] sm:w-[280px] rounded-full bg-gradient-to-r from-[#635bff] to-[#4f46e5] text-white shadow-[0_12px_32px_rgba(99,91,255,0.35)] hover:shadow-[0_16px_40px_rgba(99,91,255,0.45)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-3 px-3.5 cursor-pointer border border-white/20 animate-in fade-in slide-in-from-bottom-2 duration-150"
+          style={{
+            position: "fixed",
+            right: "24px",
+            bottom: "22px",
+            left: "auto",
+          }}
         >
           <div className="w-[50px] h-[50px] rounded-full bg-white/20 ring-2 ring-white/70 overflow-hidden shrink-0 flex items-center justify-center shadow-xs">
             <img
@@ -258,7 +271,15 @@ export function FloatingTutor({
 
       {/* ── 3. Active Chat Drawer ───────────────────────────────────────────── */}
       {viewState === "chat" && (
-        <div className="fixed bottom-5 right-4 sm:right-6 z-50 w-[calc(100vw-32px)] sm:w-[410px] h-[570px] max-h-[85vh] rounded-[26px] border border-[var(--border)] bg-[var(--card)] shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-250">
+        <div
+          className="fixed z-50 w-[calc(100vw-32px)] sm:w-[410px] h-[570px] max-h-[85vh] rounded-[26px] border border-[var(--border)] bg-[var(--card)] shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-250"
+          style={{
+            position: "fixed",
+            right: "24px",
+            bottom: "20px",
+            left: "auto",
+          }}
+        >
           {/* Header Bar */}
           <div className="px-5 py-3.5 bg-gradient-to-r from-[#635bff] to-[#4f46e5] text-white flex items-center justify-between shadow-xs">
             <div className="flex items-center gap-2.5">
