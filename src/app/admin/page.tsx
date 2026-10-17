@@ -395,7 +395,8 @@ export default function AdminDashboardPage() {
       // Allow tiny chunk size when testing
       const testChunkSize =
         typeof window !== "undefined" && (window as unknown as { __TEST_CHUNK_SIZE?: number }).__TEST_CHUNK_SIZE;
-      const CHUNK_SIZE = testChunkSize || (19 * 1024 * 1024);
+      // Slicing chunk size: 3.5 MiB to stay safely under Vercel Serverless Function's 4.5 MB body limit
+      const CHUNK_SIZE = testChunkSize || Math.floor(3.5 * 1024 * 1024);
 
       const totalParts = Math.max(1, Math.ceil(file.size / CHUNK_SIZE));
       const uploadId = `upload_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
