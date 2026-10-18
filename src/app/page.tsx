@@ -110,12 +110,6 @@ export default function StudentHomePage() {
         <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] items-center gap-6 lg:gap-8 min-h-[300px]">
           {/* Left Text Content */}
           <div className="space-y-4 max-w-[560px]">
-            <div>
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-[#ecebff] text-[#5b54ec] border border-[#d9defe]/60">
-                <Sparkles className="w-3.5 h-3.5" />
-                Student Learning Portal
-              </span>
-            </div>
             <h1 className="text-2xl sm:text-3xl lg:text-[44px] font-extrabold tracking-tight text-[#1f2937] leading-[1.14] whitespace-normal xl:whitespace-nowrap">
               Social Science Study Library
             </h1>

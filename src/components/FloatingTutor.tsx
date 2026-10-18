@@ -31,20 +31,22 @@ function ChatFileAttachmentCard({
   title: string;
   subtitle?: string;
 }) {
+  const cleanTitle = (title || "NCERT Study Material").replace(/[*_#`[\]()]/g, "").trim();
+
   return (
-    <div className="my-2 rounded-2xl border border-[var(--border)] bg-gradient-to-b from-white to-[#f8f9fd] dark:from-[var(--card)] dark:to-[var(--card)] p-3 shadow-xs transition-all hover:border-[var(--primary)]/40 text-left">
+    <div className="my-2 rounded-2xl border border-[#dee6f2] bg-gradient-to-b from-white to-[#f8f9fd] p-3.5 shadow-xs transition-all hover:border-[#635bff]/40 text-left">
       {/* File Header */}
       <div className="flex items-start gap-2.5">
-        <div className="w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0 shadow-2xs">
+        <div className="w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 flex items-center justify-center shrink-0 shadow-2xs">
           <FileText className="w-4.5 h-4.5" />
         </div>
         <div className="flex-1 min-w-0">
-          <h5 className="text-[12.5px] font-bold text-[var(--foreground)] leading-snug break-words">
-            {title}
+          <h5 className="text-[13px] font-bold text-[#1f2937] leading-snug break-words">
+            {cleanTitle}
           </h5>
-          <div className="flex items-center gap-1.5 mt-0.5 text-[10.5px] text-[var(--muted-foreground)]">
-            <span className="inline-flex items-center gap-1 font-medium text-emerald-600 dark:text-emerald-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+          <div className="flex items-center gap-1.5 mt-0.5 text-[11px] text-[#475569]">
+            <span className="inline-flex items-center gap-1 font-semibold text-emerald-600 whitespace-nowrap shrink-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block shrink-0" />
               Verified PDF
             </span>
             {subtitle && (
@@ -58,15 +60,15 @@ function ChatFileAttachmentCard({
       </div>
 
       {/* Action Buttons */}
-      <div className="mt-2.5 pt-2 border-t border-[var(--border)]/60 flex items-center gap-2">
+      <div className="mt-3 pt-2.5 border-t border-[#dee6f2] flex items-center gap-2">
         {streamUrl && (
           <a
             href={streamUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 inline-flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-xl border border-[var(--border)] bg-white dark:bg-slate-800 text-[var(--foreground)] hover:bg-slate-50 dark:hover:bg-slate-700/60 font-semibold text-[11px] transition-all shadow-2xs active:scale-[0.98] no-underline cursor-pointer"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-all shadow-xs active:scale-[0.98] no-underline cursor-pointer"
           >
-            <Eye className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <Eye className="w-3.5 h-3.5 text-white shrink-0" />
             <span>Preview Online</span>
           </a>
         )}
@@ -76,9 +78,9 @@ function ChatFileAttachmentCard({
             download
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 inline-flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-xl bg-gradient-to-r from-[#635bff] to-[#4f46e5] text-white hover:brightness-105 font-semibold text-[11px] transition-all shadow-xs active:scale-[0.98] no-underline cursor-pointer"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-gradient-to-r from-[#635bff] to-[#4f46e5] hover:brightness-105 text-white font-bold text-xs transition-all shadow-xs active:scale-[0.98] no-underline cursor-pointer"
           >
-            <Download className="w-3.5 h-3.5 shrink-0" />
+            <Download className="w-3.5 h-3.5 text-white shrink-0" />
             <span>Download PDF</span>
           </a>
         )}
@@ -121,13 +123,13 @@ function ChatMessageContent({ text, isUser }: { text: string; isUser: boolean })
 
   // Detect chapter title or subject context from message text if available
   let extractedChapterTitle = "";
-  const titleInQuotes = text.match(/"([^"]+)"/);
+  const titleInQuotes = text.match(/["“]([^"”]+)["”]/);
   if (titleInQuotes) {
-    extractedChapterTitle = titleInQuotes[1];
+    extractedChapterTitle = titleInQuotes[1].replace(/[*_#`[\]()]/g, "").trim();
   } else {
     const chapterMatch = text.match(/Chapter\s+\d+[:\s—-]+([^\n,.]+)/i);
     if (chapterMatch) {
-      extractedChapterTitle = chapterMatch[0].trim();
+      extractedChapterTitle = chapterMatch[0].replace(/[*_#`[\]()]/g, "").trim();
     }
   }
 
@@ -296,6 +298,12 @@ function renderMarkdownText(text: string, isUser: boolean, baseKey: string): Rea
   return parts;
 }
 
+const DEFAULT_WELCOME_MESSAGE = `Namaste! 🙏 I am your SST Study Buddy.
+Ask me any question about your chapters, concepts, or exam summaries in English, Hindi, or Hinglish. You can also directly ask me for the **Preview** or **Download** links for any chapter, textbook, or teacher notes!
+
+नमस्ते! 🙏 मैं आपका SST Study Buddy हूँ।
+मुझसे अपने चैप्टर्स, कॉन्सेप्ट्स या परीक्षा सारांश से जुड़ा कोई भी सवाल पूछें। आप किसी भी चैप्टर, टेक्स्टबुक या नोट्स के **Preview** और **Download** लिंक भी सीधे मुझसे मांग सकते हैं!`;
+
 export function FloatingTutor({
   currentClass,
   currentSubject,
@@ -305,7 +313,7 @@ export function FloatingTutor({
   const [messages, setMessages] = useState<Array<{ sender: "bot" | "user"; text: string }>>([
     {
       sender: "bot",
-      text: "Namaste! 🙏 I am your SST Study Buddy. Ask me any question about your chapters, concepts, or exam summaries in English, Hindi, or Hinglish!",
+      text: DEFAULT_WELCOME_MESSAGE,
     },
   ]);
   const [input, setInput] = useState("");
@@ -461,7 +469,7 @@ export function FloatingTutor({
     setMessages([
       {
         sender: "bot",
-        text: "Namaste! 🙏 I am your SST Study Buddy. Ask me any question about your chapters, concepts, or exam summaries in English, Hindi, or Hinglish!",
+        text: DEFAULT_WELCOME_MESSAGE,
       },
     ]);
   }
@@ -577,8 +585,10 @@ export function FloatingTutor({
                 />
               </div>
               <div>
-                <h4 className="text-sm font-bold tracking-tight">SST AI Study Buddy</h4>
-                <p className="text-[10px] text-white/80">Classes 6–10 (English, Hindi, Hinglish)</p>
+                <h4 className="text-sm font-bold tracking-tight flex items-center gap-1.5">
+                  SST AI Study Buddy
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-2xs" />
+                </h4>
               </div>
             </div>
 
