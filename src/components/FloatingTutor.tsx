@@ -10,6 +10,7 @@ import {
   RotateCcw,
   Download,
   Eye,
+  FileText,
 } from "lucide-react";
 import { SUGGESTED_QUESTIONS } from "@/lib/tutor-prompt";
 
@@ -19,27 +20,170 @@ interface FloatingTutorProps {
   currentChapter?: string;
 }
 
+function ChatFileAttachmentCard({
+  streamUrl,
+  downloadUrl,
+  title,
+  subtitle,
+}: {
+  streamUrl?: string;
+  downloadUrl?: string;
+  title: string;
+  subtitle?: string;
+}) {
+  return (
+    <div className="my-2 rounded-2xl border border-[var(--border)] bg-gradient-to-b from-white to-[#f8f9fd] dark:from-[var(--card)] dark:to-[var(--card)] p-3 shadow-xs transition-all hover:border-[var(--primary)]/40 text-left">
+      {/* File Header */}
+      <div className="flex items-start gap-2.5">
+        <div className="w-9 h-9 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0 shadow-2xs">
+          <FileText className="w-4.5 h-4.5" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <h5 className="text-[12.5px] font-bold text-[var(--foreground)] leading-snug break-words">
+            {title}
+          </h5>
+          <div className="flex items-center gap-1.5 mt-0.5 text-[10.5px] text-[var(--muted-foreground)]">
+            <span className="inline-flex items-center gap-1 font-medium text-emerald-600 dark:text-emerald-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+              Verified PDF
+            </span>
+            {subtitle && (
+              <>
+                <span>•</span>
+                <span className="truncate">{subtitle}</span>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="mt-2.5 pt-2 border-t border-[var(--border)]/60 flex items-center gap-2">
+        {streamUrl && (
+          <a
+            href={streamUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-xl border border-[var(--border)] bg-white dark:bg-slate-800 text-[var(--foreground)] hover:bg-slate-50 dark:hover:bg-slate-700/60 font-semibold text-[11px] transition-all shadow-2xs active:scale-[0.98] no-underline cursor-pointer"
+          >
+            <Eye className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span>Preview Online</span>
+          </a>
+        )}
+        {downloadUrl && (
+          <a
+            href={downloadUrl}
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-xl bg-gradient-to-r from-[#635bff] to-[#4f46e5] text-white hover:brightness-105 font-semibold text-[11px] transition-all shadow-xs active:scale-[0.98] no-underline cursor-pointer"
+          >
+            <Download className="w-3.5 h-3.5 shrink-0" />
+            <span>Download PDF</span>
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function ChatMessageContent({ text, isUser }: { text: string; isUser: boolean }) {
   if (!text) {
     return <span className="italic text-[var(--muted-foreground)]">Thinking...</span>;
   }
 
+  // 1. Extract any file cards from the message
+  const fileLinkRegex = /\[([^\]]*)\]\((\/api\/files\/([a-zA-Z0-9_-]+)\/(stream|download))\)/gi;
+  const matches = Array.from(text.matchAll(fileLinkRegex));
+
+  const fileCardsMap = new Map<
+    string,
+    { fileId: string; streamUrl?: string; downloadUrl?: string; label?: string }
+  >();
+
+  for (const m of matches) {
+    const label = m[1];
+    const url = m[2];
+    const fileId = m[3];
+    const action = m[4].toLowerCase();
+
+    const existing = fileCardsMap.get(fileId) || { fileId };
+    if (action === "stream") existing.streamUrl = url;
+    if (action === "download") existing.downloadUrl = url;
+    if (label && !existing.label) {
+      existing.label = label
+        .replace(/[*_#`[\]()]/g, "")
+        .replace(/^[\p{Extended_Pictographic}\uFE0F\s]+/u, "")
+        .trim();
+    }
+    fileCardsMap.set(fileId, existing);
+  }
+
+  // Detect chapter title or subject context from message text if available
+  let extractedChapterTitle = "";
+  const titleInQuotes = text.match(/"([^"]+)"/);
+  if (titleInQuotes) {
+    extractedChapterTitle = titleInQuotes[1];
+  } else {
+    const chapterMatch = text.match(/Chapter\s+\d+[:\s—-]+([^\n,.]+)/i);
+    if (chapterMatch) {
+      extractedChapterTitle = chapterMatch[0].trim();
+    }
+  }
+
+  let extractedSubjectContext = "";
+  const classMatch = text.match(/Class\s+\d+/i);
+  const subjectMatch = text.match(/\b(Civics|History|Geography|Economics)\b/i);
+  if (classMatch && subjectMatch) {
+    extractedSubjectContext = `${classMatch[0]} ${subjectMatch[0]}`;
+  } else if (classMatch) {
+    extractedSubjectContext = classMatch[0];
+  }
+
+  // 2. Clean lines for text display: remove lines that are solely file links or bullets with file links
   const lines = text.split("\n");
+  const filteredLines: Array<{ line: string; isBullet: boolean }> = [];
+
+  for (const rawLine of lines) {
+    const trimmed = rawLine.trim();
+    if (!trimmed) {
+      filteredLines.push({ line: "", isBullet: false });
+      continue;
+    }
+
+    // Check if line is solely a file link (with optional bullet or asterisks)
+    const lineWithoutFileLinks = trimmed
+      .replace(fileLinkRegex, "")
+      .replace(/[*_#`•\-]/g, "")
+      .trim();
+
+    if (matches.length > 0 && lineWithoutFileLinks.length === 0) {
+      // This line was just a link button/bullet; omit from prose so no dangling bullets or asterisks!
+      continue;
+    }
+
+    const isBullet = trimmed.startsWith("- ") || trimmed.startsWith("* ") || trimmed.startsWith("• ");
+    const lineContent = isBullet ? trimmed.replace(/^[-*•]\s+/, "") : rawLine;
+
+    // Also strip any leftover file links from inline text
+    const cleanContent = lineContent.replace(fileLinkRegex, "").trim();
+    if (cleanContent) {
+      filteredLines.push({ line: cleanContent, isBullet });
+    }
+  }
+
+  const cards = Array.from(fileCardsMap.values());
 
   return (
-    <div className="space-y-1.5 min-w-0 break-words [overflow-wrap:anywhere] [word-break:break-word] text-[12.5px] leading-relaxed">
-      {lines.map((line, lineIdx) => {
-        const trimmed = line.trim();
-        if (!trimmed) {
+    <div className="space-y-1.5 min-w-0 break-words [overflow-wrap:anywhere] text-[12.5px] leading-relaxed">
+      {filteredLines.map((item, lineIdx) => {
+        if (!item.line) {
           return <div key={lineIdx} className="h-1" />;
         }
 
-        const isBullet = trimmed.startsWith("- ") || trimmed.startsWith("* ") || trimmed.startsWith("• ");
-        const lineContent = isBullet ? trimmed.replace(/^[-*•]\s+/, "") : line;
+        const renderedContent = renderInlineFormatted(item.line, isUser);
 
-        const renderedContent = renderInlineFormatted(lineContent, isUser);
-
-        if (isBullet) {
+        if (item.isBullet) {
           return (
             <div key={lineIdx} className="flex items-start gap-1.5 pl-0.5 min-w-0">
               <span
@@ -60,6 +204,26 @@ function ChatMessageContent({ text, isUser }: { text: string; isUser: boolean })
           </div>
         );
       })}
+
+      {/* Render File Cards cleanly beneath the introductory text */}
+      {cards.length > 0 && (
+        <div className="pt-1 space-y-2">
+          {cards.map((c) => (
+            <ChatFileAttachmentCard
+              key={c.fileId}
+              streamUrl={c.streamUrl}
+              downloadUrl={c.downloadUrl}
+              title={
+                extractedChapterTitle ||
+                (extractedSubjectContext ? `${extractedSubjectContext} Notes` : "NCERT Study Material")
+              }
+              subtitle={
+                extractedSubjectContext ? `${extractedSubjectContext} • Teacher Notes` : "PDF Document • Teacher Notes"
+              }
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -80,50 +244,21 @@ function renderInlineFormatted(text: string, isUser: boolean): React.ReactNode[]
     const url = match[2];
     const key = `link-${match.index}`;
 
-    if (url.includes("/download")) {
-      parts.push(
-        <a
-          key={key}
-          href={url}
-          download
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 my-1 mr-1.5 rounded-xl bg-[var(--primary)] text-white hover:opacity-90 font-semibold text-xs shadow-xs transition-all active:scale-95 no-underline cursor-pointer"
-        >
-          <Download className="w-3.5 h-3.5 shrink-0" />
-          <span>{label.replace(/^[📥⬇️]\s*/, "")}</span>
-        </a>
-      );
-    } else if (url.includes("/stream")) {
-      parts.push(
-        <a
-          key={key}
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 my-1 mr-1.5 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 font-semibold text-xs shadow-xs transition-all active:scale-95 no-underline cursor-pointer"
-        >
-          <Eye className="w-3.5 h-3.5 shrink-0" />
-          <span>{label.replace(/^[👁️👀]\s*/, "")}</span>
-        </a>
-      );
-    } else {
-      parts.push(
-        <a
-          key={key}
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={
-            isUser
-              ? "underline font-medium text-white hover:opacity-85"
-              : "text-[var(--primary)] underline font-medium hover:opacity-80"
-          }
-        >
-          {label}
-        </a>
-      );
-    }
+    parts.push(
+      <a
+        key={key}
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={
+          isUser
+            ? "underline font-medium text-white hover:opacity-85"
+            : "text-[var(--primary)] underline font-medium hover:opacity-80"
+        }
+      >
+        {label}
+      </a>
+    );
 
     lastIndex = match.index + match[0].length;
   }
@@ -147,7 +282,7 @@ function renderMarkdownText(text: string, isUser: boolean, baseKey: string): Rea
       parts.push(text.slice(lastIndex, match.index));
     }
     parts.push(
-      <strong key={`${baseKey}-b-${match.index}`} className="font-semibold break-all">
+      <strong key={`${baseKey}-b-${match.index}`} className="font-semibold break-words">
         {match[1]}
       </strong>
     );

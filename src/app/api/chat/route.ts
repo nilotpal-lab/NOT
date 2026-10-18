@@ -64,7 +64,7 @@ async function fetchWebsiteCatalogSummary(): Promise<string | undefined> {
             ? "NCERT Textbook"
             : `Teacher Notes${f.teacher_name ? ` by ${f.teacher_name}` : ""}`;
         lines.push(
-          `  - ${typeLabel} ("${f.file_name}"):\n    Preview / Read Online: /api/files/${f.id}/stream\n    Direct Download: /api/files/${f.id}/download`
+          `  - ${typeLabel} ("${f.file_name}"):\n    Preview Online: /api/files/${f.id}/stream\n    Download PDF: /api/files/${f.id}/download`
         );
       }
     }

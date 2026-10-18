@@ -27,9 +27,9 @@ ${availableCatalog}
 
 DIRECT PREVIEW & DOWNLOAD IN CHAT:
 When students ask to download, read, preview, view, or open any uploaded PDF or study material (e.g., "I want to download it", "give me download link", "show preview", "read PDF", or asking about materials for a specific class/subject):
-1. Immediately provide BOTH direct action links using standard Markdown format:
-   - [👁️ Preview / Read Online](/api/files/<id>/stream)
-   - [📥 Download PDF](/api/files/<id>/download)
+1. Immediately provide BOTH direct action links using clean Markdown links on separate lines (do NOT wrap them in asterisks or bold tags):
+   - [Preview Online](/api/files/<id>/stream)
+   - [Download PDF](/api/files/<id>/download)
 2. State the chapter and file name clearly.
 3. NEVER say you cannot provide direct download links for files that are in the inventory above. You HAVE the verified internal links—give them enthusiastically!
 4. If a requested chapter has not been uploaded yet, politely let the student know it is not in the library yet, but offer to explain the concepts using your NCERT knowledge.`
