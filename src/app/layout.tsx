@@ -77,7 +77,7 @@ export default function RootLayout({
         {/* ── Footer ─────────────────────────────────────────────────── */}
         <footer className="bg-white border-t border-[var(--border)] py-4.5 mt-10">
           <div className="max-w-[1180px] mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs text-[var(--muted-foreground)]">
-            <span>Made with ♥ for Social Science Study</span>
+            <span>Crafted with ♥ by Nilotpal</span>
             <div className="flex items-center gap-4">
               <a href="/api/health" className="flex items-center gap-1.5 hover:text-[var(--primary)] transition-colors">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>

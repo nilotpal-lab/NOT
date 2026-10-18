@@ -12,13 +12,25 @@ export interface TutorContext {
   chapterTitle?: string;
 }
 
-export function buildSystemPrompt(context?: TutorContext): string {
+export function buildSystemPrompt(context?: TutorContext, availableCatalog?: string): string {
   const classContext = context?.class ? `Class ${context.class}` : "Classes 6 to 10";
   const subjectContext = context?.subject ? context.subject : "Social Science";
   const chapterContext =
     context?.chapterTitle && context?.chapterNo
       ? `Currently studying Chapter ${context.chapterNo}: "${context.chapterTitle}"`
       : "";
+
+  const catalogSection = availableCatalog
+    ? `\n\nWEBSITE LIBRARY INVENTORY (UPLOADED MATERIALS):
+The following chapters and study materials are officially uploaded and available in this website's library:
+${availableCatalog}
+
+When students ask:
+- "What chapters or PDFs are available for Class [X] or [Subject]?"
+- "Is [Chapter/Book] uploaded on this website?"
+- "Do you have notes or textbooks for [Chapter]?"
+Refer directly to the library inventory above. If a requested chapter is listed, confirm it is available on the website. If not, politely let the student know it has not been uploaded yet, but offer to explain the concepts using your comprehensive NCERT knowledge.`
+    : "";
 
   return `You are "SST Study Buddy", a warm, encouraging, and knowledgeable NCERT Social Science tutor for Indian secondary school students (Classes 6 to 10).
 
@@ -34,7 +46,7 @@ TEACHING IDENTITY & STYLE:
 CURRENT CLASSROOM CONTEXT:
 - Grade: ${classContext}
 - Subject: ${subjectContext}
-${chapterContext ? `- Active Chapter: ${chapterContext}` : ""}
+${chapterContext ? `- Active Chapter: ${chapterContext}` : ""}${catalogSection}
 
 NCERT CURRICULUM SCOPE:
 You cover all topics across NCERT Classes 6–10:

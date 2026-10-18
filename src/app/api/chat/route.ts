@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getGroqClient } from "@/lib/groq";
 import { buildSystemPrompt, TutorContext } from "@/lib/tutor-prompt";
+import { getChaptersWithFiles } from "@/lib/catalog";
 import { logger } from "@/lib/logger";
 
 // In-memory sliding window rate limiter: IP -> Array of timestamps (epoch ms)
@@ -27,6 +28,59 @@ function checkRateLimit(ip: string): boolean {
 // Reset rate limits for test purposes
 export function _resetRateLimits(): void {
   ipRequestHistory.clear();
+}
+
+// In-memory short-lived cache for website catalog summary in system prompt
+let cachedCatalogSummary: { text: string; expiresAt: number } | null = null;
+
+export function _resetCatalogCache(): void {
+  cachedCatalogSummary = null;
+}
+
+async function fetchWebsiteCatalogSummary(): Promise<string | undefined> {
+  const now = Date.now();
+  if (cachedCatalogSummary && now < cachedCatalogSummary.expiresAt) {
+    return cachedCatalogSummary.text;
+  }
+
+  try {
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
+      return undefined;
+    }
+
+    const chapters = await getChaptersWithFiles({ isPublished: true, hideEmptyChapters: true });
+    if (!chapters || chapters.length === 0) {
+      return undefined;
+    }
+
+    const lines: string[] = [];
+    for (const chap of chapters) {
+      const fileDescriptions = (chap.files || [])
+        .map(
+          (f) =>
+            `${f.kind === "textbook" ? "NCERT Textbook" : "Teacher Notes"}${
+              f.teacher_name ? ` by ${f.teacher_name}` : ""
+            }${f.file_name ? ` (${f.file_name})` : ""}`
+        )
+        .join(", ");
+
+      lines.push(
+        `- Class ${chap.class} ${chap.subject} - Chapter ${chap.chapter_no}: "${chap.title}" [Files: ${
+          fileDescriptions || "Available"
+        }]`
+      );
+    }
+
+    const summary = lines.join("\n");
+    cachedCatalogSummary = {
+      text: summary,
+      expiresAt: now + 60 * 1000, // cache for 60 seconds
+    };
+    return summary;
+  } catch (err) {
+    logger.warn({ err }, "Could not load catalog inventory for chat prompt");
+    return undefined;
+  }
 }
 
 interface ChatRequestBody {
@@ -76,9 +130,10 @@ export async function POST(req: NextRequest) {
     content: (m.content || "").slice(0, 2000).trim(),
   }));
 
+  const catalogSummary = await fetchWebsiteCatalogSummary();
   const systemMessage = {
     role: "system" as const,
-    content: buildSystemPrompt(context),
+    content: buildSystemPrompt(context, catalogSummary),
   };
 
   const fullMessages = [systemMessage, ...sanitizedMessages];

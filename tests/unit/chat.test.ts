@@ -34,6 +34,14 @@ describe("Phase 3: AI Groq Tutor & NCERT Guardrails (tests/unit/chat.test.ts)", 
       expect(prompt).toContain('Chapter 1: "The Story of Village Palampur"');
     });
 
+    it("injects uploaded website catalog inventory when provided", () => {
+      const sampleCatalog = '- Class 6 Civics - Chapter 1: "Understanding Diversity" [Files: NCERT Textbook (understanding-diversity.pdf)]';
+      const prompt = buildSystemPrompt(undefined, sampleCatalog);
+      expect(prompt).toContain("WEBSITE LIBRARY INVENTORY");
+      expect(prompt).toContain('Class 6 Civics - Chapter 1: "Understanding Diversity"');
+      expect(prompt).toContain("understanding-diversity.pdf");
+    });
+
     it("provides curated suggestions for all NCERT subjects", () => {
       expect(SUGGESTED_QUESTIONS["History"].length).toBeGreaterThanOrEqual(3);
       expect(SUGGESTED_QUESTIONS["Geography"].length).toBeGreaterThanOrEqual(3);
