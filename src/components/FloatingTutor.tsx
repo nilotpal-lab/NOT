@@ -1,13 +1,164 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { MessageSquare, X, Send, Sparkles, BookOpen, RotateCcw } from "lucide-react";
+import {
+  MessageSquare,
+  X,
+  Send,
+  Sparkles,
+  BookOpen,
+  RotateCcw,
+  Download,
+  Eye,
+} from "lucide-react";
 import { SUGGESTED_QUESTIONS } from "@/lib/tutor-prompt";
 
 interface FloatingTutorProps {
   currentClass?: number | string;
   currentSubject?: string;
   currentChapter?: string;
+}
+
+function ChatMessageContent({ text, isUser }: { text: string; isUser: boolean }) {
+  if (!text) {
+    return <span className="italic text-[var(--muted-foreground)]">Thinking...</span>;
+  }
+
+  const lines = text.split("\n");
+
+  return (
+    <div className="space-y-1.5 min-w-0 break-words [overflow-wrap:anywhere] [word-break:break-word] text-[12.5px] leading-relaxed">
+      {lines.map((line, lineIdx) => {
+        const trimmed = line.trim();
+        if (!trimmed) {
+          return <div key={lineIdx} className="h-1" />;
+        }
+
+        const isBullet = trimmed.startsWith("- ") || trimmed.startsWith("* ") || trimmed.startsWith("• ");
+        const lineContent = isBullet ? trimmed.replace(/^[-*•]\s+/, "") : line;
+
+        const renderedContent = renderInlineFormatted(lineContent, isUser);
+
+        if (isBullet) {
+          return (
+            <div key={lineIdx} className="flex items-start gap-1.5 pl-0.5 min-w-0">
+              <span
+                className={`text-[9px] mt-1 shrink-0 ${
+                  isUser ? "text-white/80" : "text-[var(--primary)]"
+                }`}
+              >
+                ●
+              </span>
+              <div className="flex-1 min-w-0">{renderedContent}</div>
+            </div>
+          );
+        }
+
+        return (
+          <div key={lineIdx} className="min-w-0">
+            {renderedContent}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function renderInlineFormatted(text: string, isUser: boolean): React.ReactNode[] {
+  // Regex to match Markdown links: [label](url)
+  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = linkRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(...renderMarkdownText(text.slice(lastIndex, match.index), isUser, `txt-${lastIndex}`));
+    }
+
+    const label = match[1];
+    const url = match[2];
+    const key = `link-${match.index}`;
+
+    if (url.includes("/download")) {
+      parts.push(
+        <a
+          key={key}
+          href={url}
+          download
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 my-1 mr-1.5 rounded-xl bg-[var(--primary)] text-white hover:opacity-90 font-semibold text-xs shadow-xs transition-all active:scale-95 no-underline cursor-pointer"
+        >
+          <Download className="w-3.5 h-3.5 shrink-0" />
+          <span>{label.replace(/^[📥⬇️]\s*/, "")}</span>
+        </a>
+      );
+    } else if (url.includes("/stream")) {
+      parts.push(
+        <a
+          key={key}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 my-1 mr-1.5 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 font-semibold text-xs shadow-xs transition-all active:scale-95 no-underline cursor-pointer"
+        >
+          <Eye className="w-3.5 h-3.5 shrink-0" />
+          <span>{label.replace(/^[👁️👀]\s*/, "")}</span>
+        </a>
+      );
+    } else {
+      parts.push(
+        <a
+          key={key}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={
+            isUser
+              ? "underline font-medium text-white hover:opacity-85"
+              : "text-[var(--primary)] underline font-medium hover:opacity-80"
+          }
+        >
+          {label}
+        </a>
+      );
+    }
+
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(...renderMarkdownText(text.slice(lastIndex), isUser, `txt-${lastIndex}`));
+  }
+
+  return parts;
+}
+
+function renderMarkdownText(text: string, isUser: boolean, baseKey: string): React.ReactNode[] {
+  // Regex to match **bold**
+  const boldRegex = /\*\*([^*]+)\*\*/g;
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = boldRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    parts.push(
+      <strong key={`${baseKey}-b-${match.index}`} className="font-semibold break-all">
+        {match[1]}
+      </strong>
+    );
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts;
 }
 
 export function FloatingTutor({
@@ -333,11 +484,13 @@ export function FloatingTutor({
           </div>
 
           {/* Messages Feed */}
-          <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[var(--background)]/60 text-xs">
+          <div className="flex-1 p-3.5 sm:p-4 overflow-y-auto overflow-x-hidden space-y-3 bg-[var(--background)]/60 text-xs min-w-0 w-full">
             {messages.map((m, idx) => (
               <div
                 key={idx}
-                className={`flex gap-2 items-start ${m.sender === "user" ? "justify-end" : "justify-start"}`}
+                className={`flex gap-2 items-start w-full min-w-0 ${
+                  m.sender === "user" ? "justify-end" : "justify-start"
+                }`}
               >
                 {m.sender === "bot" && (
                   <div className="w-7 h-7 rounded-full overflow-hidden bg-[#eef0ff] border border-[#dee6f2] shrink-0 mt-0.5 shadow-2xs flex items-center justify-center">
@@ -349,17 +502,13 @@ export function FloatingTutor({
                   </div>
                 )}
                 <div
-                  className={`max-w-[82%] px-3.5 py-2.5 rounded-2xl whitespace-pre-wrap leading-relaxed ${
+                  className={`max-w-[85%] sm:max-w-[82%] px-3.5 py-2.5 rounded-2xl leading-relaxed min-w-0 break-words [overflow-wrap:anywhere] [word-break:break-word] ${
                     m.sender === "user"
-                      ? "bg-[var(--primary)] text-white rounded-br-xs shadow-xs"
-                      : "bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] shadow-xs rounded-bl-xs"
+                      ? "bg-[var(--primary)] text-white rounded-br-xs shadow-xs ml-auto"
+                      : "bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] shadow-xs rounded-bl-xs mr-auto"
                   }`}
                 >
-                  {m.text || (
-                    <span className="italic text-[var(--muted-foreground)]">
-                      Thinking...
-                    </span>
-                  )}
+                  <ChatMessageContent text={m.text} isUser={m.sender === "user"} />
                 </div>
               </div>
             ))}

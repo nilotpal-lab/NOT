@@ -55,20 +55,18 @@ async function fetchWebsiteCatalogSummary(): Promise<string | undefined> {
 
     const lines: string[] = [];
     for (const chap of chapters) {
-      const fileDescriptions = (chap.files || [])
-        .map(
-          (f) =>
-            `${f.kind === "textbook" ? "NCERT Textbook" : "Teacher Notes"}${
-              f.teacher_name ? ` by ${f.teacher_name}` : ""
-            }${f.file_name ? ` (${f.file_name})` : ""}`
-        )
-        .join(", ");
-
       lines.push(
-        `- Class ${chap.class} ${chap.subject} - Chapter ${chap.chapter_no}: "${chap.title}" [Files: ${
-          fileDescriptions || "Available"
-        }]`
+        `• Class ${chap.class} ${chap.subject} - Chapter ${chap.chapter_no}: "${chap.title}"`
       );
+      for (const f of chap.files || []) {
+        const typeLabel =
+          f.kind === "textbook"
+            ? "NCERT Textbook"
+            : `Teacher Notes${f.teacher_name ? ` by ${f.teacher_name}` : ""}`;
+        lines.push(
+          `  - ${typeLabel} ("${f.file_name}"):\n    Preview / Read Online: /api/files/${f.id}/stream\n    Direct Download: /api/files/${f.id}/download`
+        );
+      }
     }
 
     const summary = lines.join("\n");
