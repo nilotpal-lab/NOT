@@ -81,7 +81,7 @@ function LoginForm() {
           <h1 className="text-2xl font-bold text-[var(--foreground)] tracking-tight">
             Admin Login - SST Chapter Library
           </h1>
-          <p className="text-sm text-[var(--muted)] mt-1.5">
+          <p className="text-sm text-[var(--muted-foreground)] mt-1.5 font-medium">
             Enter master key to manage chapters, upload materials, and edit library records.
           </p>
         </div>
@@ -128,12 +128,12 @@ function LoginForm() {
                 autoFocus
                 disabled={loading}
                 placeholder="••••••••••••"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--background)] text-[var(--foreground)] placeholder-[var(--muted)] focus:outline-hidden focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm transition-all"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[var(--border-color)] bg-[var(--background)] text-[var(--foreground)] placeholder-[var(--muted-foreground)] focus:outline-hidden focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent text-sm transition-all"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted)] hover:text-[var(--foreground)] text-xs font-medium cursor-pointer select-none"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)] hover:text-[var(--foreground)] text-xs font-semibold cursor-pointer select-none"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? "Hide" : "Show"}
@@ -177,7 +177,7 @@ function LoginForm() {
           </button>
         </form>
 
-        <div className="mt-6 pt-4 border-t border-[var(--border-color)] text-center text-xs text-[var(--muted)]">
+        <div className="mt-6 pt-4 border-t border-[var(--border-color)] text-center text-xs text-[var(--muted-foreground)]">
           <Link href="/" className="hover:text-[var(--foreground)] transition-colors">
             &larr; Return to Public Library
           </Link>
@@ -193,7 +193,7 @@ export default function AdminLoginPage() {
       fallback={
         <div className="flex items-center justify-center min-h-[calc(100vh-140px)]">
           <div className="w-full max-w-md p-8 rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] shadow-md text-center">
-            <p className="text-sm text-[var(--muted)]">Loading login interface...</p>
+            <p className="text-sm text-[var(--muted-foreground)] font-medium">Loading login interface...</p>
           </div>
         </div>
       }

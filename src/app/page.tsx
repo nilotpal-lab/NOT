@@ -119,7 +119,7 @@ export default function StudentHomePage() {
             <h1 className="text-2xl sm:text-3xl lg:text-[44px] font-extrabold tracking-tight text-[#1f2937] leading-[1.14] whitespace-normal xl:whitespace-nowrap">
               Social Science Study Library
             </h1>
-            <p className="text-sm sm:text-[15px] text-[#64748b] leading-relaxed">
+            <p className="text-sm sm:text-[15px] text-[#475569] font-medium leading-relaxed">
               Explore chapters, notes, textbooks, and interactive presentations for Classes 6 to 10. Read online or download study materials in one click.
             </p>
           </div>
@@ -246,7 +246,7 @@ export default function StudentHomePage() {
             </div>
             <div>
               <h3 className="text-lg font-bold text-[#1f2937]">No chapters available yet</h3>
-              <p className="text-sm text-[#64748b] mt-1 max-w-sm mx-auto leading-relaxed">
+              <p className="text-sm text-[#475569] font-medium mt-1 max-w-sm mx-auto leading-relaxed">
                 Your teacher has not uploaded any published materials for Class {selectedClass} in this subject category.
               </p>
             </div>

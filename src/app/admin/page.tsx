@@ -635,7 +635,7 @@ export default function AdminDashboardPage() {
               Admin Session Active
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-[var(--muted)] mt-1">
+          <p className="text-xs sm:text-sm text-[var(--muted-foreground)] mt-1">
             Organize chapter materials, cascade renames, manage Telegram chunks, and control student access.
           </p>
         </div>
@@ -669,22 +669,22 @@ export default function AdminDashboardPage() {
       {/* Library Summary Statistics */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] shadow-xs">
-          <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wider">Chapters</p>
+          <p className="text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider">Chapters</p>
           <p className="text-2xl font-bold text-[var(--foreground)] mt-1">{stats.chaptersCount}</p>
         </div>
         <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] shadow-xs">
-          <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wider">Total Files</p>
+          <p className="text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider">Total Files</p>
           <p className="text-2xl font-bold text-[var(--foreground)] mt-1">{stats.totalFiles}</p>
         </div>
         <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] shadow-xs">
-          <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wider">Published / Hidden</p>
+          <p className="text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider">Published / Hidden</p>
           <p className="text-2xl font-bold text-[var(--foreground)] mt-1">
             <span className="text-emerald-600 dark:text-emerald-400">{stats.publishedFiles}</span>
-            <span className="text-[var(--muted)] font-normal text-lg"> / {stats.hiddenFiles}</span>
+            <span className="text-[var(--muted-foreground)] font-normal text-lg"> / {stats.hiddenFiles}</span>
           </p>
         </div>
         <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] shadow-xs">
-          <p className="text-xs font-medium text-[var(--muted)] uppercase tracking-wider">Storage Size</p>
+          <p className="text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider">Storage Size</p>
           <p className="text-2xl font-bold text-[var(--foreground)] mt-1">{stats.totalMb} MB</p>
         </div>
       </div>
@@ -693,7 +693,7 @@ export default function AdminDashboardPage() {
       <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-sm font-semibold text-[var(--foreground)]">Bulk Actions</h2>
-          <p className="text-xs text-[var(--muted)] mt-0.5">
+          <p className="text-xs text-[var(--muted-foreground)] mt-0.5">
             Rapidly toggle entire sets of supplemental materials across classes.
           </p>
         </div>
@@ -716,7 +716,7 @@ export default function AdminDashboardPage() {
           <button
             onClick={fetchLibrary}
             disabled={loading}
-            className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] text-xs font-medium hover:bg-black/5 dark:hover:bg-white/5 text-[var(--muted)] hover:text-[var(--foreground)] transition-colors cursor-pointer"
+            className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] text-xs font-medium hover:bg-black/5 dark:hover:bg-white/5 text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors cursor-pointer"
             title="Refresh Catalog"
           >
             &#x21bb; Refresh
@@ -727,7 +727,7 @@ export default function AdminDashboardPage() {
       {/* Filter Bar */}
       <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] shadow-xs space-y-3">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold uppercase tracking-wider text-[var(--muted)]">Filter Catalog</span>
+          <span className="text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]">Filter Catalog</span>
           {(selectedClass !== "all" ||
             selectedSubject !== "all" ||
             selectedKind !== "all" ||
@@ -751,7 +751,7 @@ export default function AdminDashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2.5">
           {/* Class Filter */}
           <div>
-            <label className="block text-xs font-medium text-[var(--muted)] mb-1">Class</label>
+            <label className="block text-xs font-semibold text-[var(--muted-foreground)] mb-1">Class</label>
             <select
               value={selectedClass}
               onChange={(e) => setSelectedClass(e.target.value)}
@@ -768,7 +768,7 @@ export default function AdminDashboardPage() {
 
           {/* Subject Filter */}
           <div>
-            <label className="block text-xs font-medium text-[var(--muted)] mb-1">Subject</label>
+            <label className="block text-xs font-semibold text-[var(--muted-foreground)] mb-1">Subject</label>
             <select
               value={selectedSubject}
               onChange={(e) => setSelectedSubject(e.target.value)}
@@ -785,7 +785,7 @@ export default function AdminDashboardPage() {
 
           {/* Kind Filter */}
           <div>
-            <label className="block text-xs font-medium text-[var(--muted)] mb-1">Kind</label>
+            <label className="block text-xs font-semibold text-[var(--muted-foreground)] mb-1">Kind</label>
             <select
               value={selectedKind}
               onChange={(e) => setSelectedKind(e.target.value)}
@@ -801,7 +801,7 @@ export default function AdminDashboardPage() {
 
           {/* Status Filter */}
           <div>
-            <label className="block text-xs font-medium text-[var(--muted)] mb-1">Status</label>
+            <label className="block text-xs font-semibold text-[var(--muted-foreground)] mb-1">Status</label>
             <select
               value={publishedStatus}
               onChange={(e) => setPublishedStatus(e.target.value)}
@@ -815,13 +815,13 @@ export default function AdminDashboardPage() {
 
           {/* Search Bar */}
           <div>
-            <label className="block text-xs font-medium text-[var(--muted)] mb-1">Search</label>
+            <label className="block text-xs font-semibold text-[var(--muted-foreground)] mb-1">Search</label>
             <input
               type="text"
               placeholder="Title or filename..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-2.5 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--background)] text-xs text-[var(--foreground)] placeholder-[var(--muted)] focus:outline-hidden focus:ring-1 focus:ring-[var(--accent)]"
+              className="w-full px-2.5 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--background)] text-xs text-[var(--foreground)] placeholder-[var(--muted-foreground)] focus:outline-hidden focus:ring-1 focus:ring-[var(--accent)]"
             />
           </div>
         </div>
@@ -873,7 +873,7 @@ export default function AdminDashboardPage() {
             </svg>
           </div>
           <h3 className="text-base font-semibold text-[var(--foreground)]">No Matching Chapters or Files</h3>
-          <p className="text-xs text-[var(--muted)] mt-1 max-w-sm mx-auto">
+          <p className="text-xs text-[var(--muted-foreground)] mt-1 max-w-sm mx-auto">
             {chapters.length === 0
               ? "The database is empty. Upload your first chapter using the upload engine."
               : "No materials match your active filter settings. Try resetting filters or searching for another keyword."}
@@ -916,7 +916,7 @@ export default function AdminDashboardPage() {
                     >
                       {chapter.subject}
                     </span>
-                    <span className="text-xs font-medium text-[var(--muted)]">
+                    <span className="text-xs font-semibold text-[var(--muted-foreground)]">
                       Ch {chapter.chapter_no}
                     </span>
                     <h3 className="text-sm sm:text-base font-bold text-[var(--foreground)] tracking-tight">
@@ -925,7 +925,7 @@ export default function AdminDashboardPage() {
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-xs text-[var(--muted)] font-medium">
+                    <span className="text-xs text-[var(--muted-foreground)] font-semibold">
                       {files.length} file{files.length === 1 ? "" : "s"}
                     </span>
 
@@ -966,7 +966,7 @@ export default function AdminDashboardPage() {
                           [chapter.id]: !isExpanded,
                         }))
                       }
-                      className="p-1 rounded text-[var(--muted)] hover:text-[var(--foreground)] cursor-pointer"
+                      className="p-1 rounded text-[var(--muted-foreground)] hover:text-[var(--foreground)] cursor-pointer"
                       aria-label={isExpanded ? "Collapse chapter" : "Expand chapter"}
                     >
                       <svg
@@ -985,14 +985,14 @@ export default function AdminDashboardPage() {
                 {isExpanded && (
                   <div className="p-0">
                     {files.length === 0 ? (
-                      <div className="p-6 text-center text-xs text-[var(--muted)]">
+                      <div className="p-6 text-center text-xs text-[var(--muted-foreground)]">
                         No materials attached to this chapter matching current filters.
                       </div>
                     ) : (
                       <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse text-xs">
                           <thead>
-                            <tr className="border-b border-[var(--border-color)] bg-black/[0.02] dark:bg-white/[0.02] text-[var(--muted)] font-medium">
+                            <tr className="border-b border-[var(--border-color)] bg-black/[0.02] dark:bg-white/[0.02] text-[var(--muted-foreground)] font-semibold">
                               <th className="py-2.5 px-4">File Name</th>
                               <th className="py-2.5 px-3">Kind</th>
                               <th className="py-2.5 px-3">Size</th>
@@ -1022,13 +1022,13 @@ export default function AdminDashboardPage() {
                                 </td>
 
                                 {/* Size */}
-                                <td className="py-3 px-3 whitespace-nowrap text-[var(--muted)]">
+                                <td className="py-3 px-3 whitespace-nowrap text-[var(--muted-foreground)] font-medium">
                                   {formatBytes(file.size_bytes)}
                                 </td>
 
                                 {/* Part Count */}
-                                <td className="py-3 px-3 whitespace-nowrap text-[var(--muted)]">
-                                  <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/5 font-mono text-[10px]">
+                                <td className="py-3 px-3 whitespace-nowrap text-[var(--muted-foreground)]">
+                                  <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/5 font-mono text-[10px] text-[var(--foreground)] font-medium">
                                     {file.part_count} {file.part_count === 1 ? "chunk" : "chunks"}
                                   </span>
                                 </td>
@@ -1044,11 +1044,11 @@ export default function AdminDashboardPage() {
                                       aria-label={`Toggle visibility for ${file.file_name}`}
                                     />
                                     <div className="w-8 h-4 bg-gray-300 dark:bg-gray-700 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-[var(--accent)]"></div>
-                                    <span className="ml-2 text-[11px] font-medium text-[var(--muted)]">
+                                    <span className="ml-2 text-[11px] font-medium text-[var(--muted-foreground)]">
                                       {file.is_published ? (
-                                        <span className="text-emerald-600 dark:text-emerald-400">Published</span>
+                                        <span className="text-emerald-600 dark:text-emerald-400 font-semibold">Published</span>
                                       ) : (
-                                        <span className="text-amber-600 dark:text-amber-400">Hidden</span>
+                                        <span className="text-amber-600 dark:text-amber-400 font-semibold">Hidden</span>
                                       )}
                                     </span>
                                   </label>
@@ -1105,7 +1105,7 @@ export default function AdminDashboardPage() {
           <div className="w-full max-w-lg p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] shadow-xl space-y-4">
             <div>
               <h3 className="text-lg font-bold text-[var(--foreground)]">Rename Chapter</h3>
-              <p className="text-xs text-[var(--muted)] mt-1">
+              <p className="text-xs text-[var(--muted-foreground)] mt-1 font-medium">
                 Class {renameModal.classNum} &bull; {renameModal.subject} &bull; Chapter {renameModal.chapterNo}
               </p>
             </div>
@@ -1169,7 +1169,7 @@ export default function AdminDashboardPage() {
           <div className="w-full max-w-lg p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div>
               <h3 className="text-lg font-bold text-[var(--foreground)]">Upload SST Material</h3>
-              <p className="text-xs text-[var(--muted)] mt-1">
+              <p className="text-xs text-[var(--muted-foreground)] mt-1 font-medium">
                 Upload chapter textbook PDFs, PPTX slides, or Teacher Notes with automatic chunking & Telegram sync.
               </p>
             </div>
@@ -1322,7 +1322,7 @@ export default function AdminDashboardPage() {
                     const f = e.target.files?.[0] || null;
                     setUploadModal((prev) => ({ ...prev, file: f }));
                   }}
-                  className="w-full text-xs text-[var(--muted)] file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border file:border-[var(--border-color)] file:text-xs file:font-semibold file:bg-black/5 dark:file:bg-white/5 file:text-[var(--foreground)] hover:file:bg-black/10 cursor-pointer"
+                  className="w-full text-xs text-[var(--muted-foreground)] font-medium file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border file:border-[var(--border-color)] file:text-xs file:font-semibold file:bg-black/5 dark:file:bg-white/5 file:text-[var(--foreground)] hover:file:bg-black/10 cursor-pointer"
                 />
               </div>
 
@@ -1359,7 +1359,7 @@ export default function AdminDashboardPage() {
           <div className="w-full max-w-md p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] shadow-xl space-y-4">
             <div>
               <h3 className="text-lg font-bold text-red-600 dark:text-red-400">Permanently Delete File</h3>
-              <p className="text-xs text-[var(--muted)] mt-1">
+              <p className="text-xs text-[var(--muted-foreground)] mt-1 font-medium">
                 Are you sure you want to remove this file from the library?
               </p>
             </div>

@@ -19,13 +19,18 @@
     /* Secondary & Accent */
     --secondary: #2dd4bf;
     --secondary-foreground: #093730;
-    --accent: #fbbf24;
+    --accent: #f59e0b;
     --accent-foreground: #78350f;
+    --accent-hover: #d97706;
 
-    /* Muted & Neutral */
+    /* Muted & Neutral - High Contrast WCAG AAA compliant */
     --muted: #eef2f8;
-    --muted-foreground: #64748b;
+    --muted-foreground: #475569;
     --pale-tint: #eef0ff;
+
+    /* Theme Variable Aliases */
+    --border-color: #dee6f2;
+    --card-bg: #ffffff;
 
     /* Destructive */
     --destructive: #f87171;
@@ -58,9 +63,13 @@
 
       --accent: #fcd34d;
       --accent-foreground: #451a03;
+      --accent-hover: #fbbf24;
 
       --muted: #212936;
-      --muted-foreground: #94a3b8;
+      --muted-foreground: #cbd5e1;
+
+      --border-color: #283344;
+      --card-bg: #171d27;
 
       --destructive: #f87171;
       --destructive-foreground: #ffffff;
