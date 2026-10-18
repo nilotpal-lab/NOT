@@ -24,6 +24,19 @@ const completeSchema = z.object({
   parentFileId: z.string().uuid().optional().nullable(),
   clientSha256: z.string().optional(),
   hasAccompanyingPdf: z.boolean().optional(),
+  uploadedParts: z
+    .array(
+      z.object({
+        partNo: z.number(),
+        tgFileId: z.string(),
+        tgFileUniqueId: z.string(),
+        tgMessageId: z.number(),
+        sizeBytes: z.number(),
+        sha256: z.string(),
+        uploadedAt: z.number().optional(),
+      })
+    )
+    .optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -66,6 +79,7 @@ export async function POST(req: NextRequest) {
     parentFileId,
     clientSha256,
     hasAccompanyingPdf,
+    uploadedParts,
   } = parsed.data;
 
   const env = getEnv();
@@ -74,12 +88,43 @@ export async function POST(req: NextRequest) {
   const db = getDb();
 
   // 3. Retrieve Upload Session (peekSession retains session data if expired for Telegram rollback)
-  const session = typeof uploadSessionManager.peekSession === "function"
+  let session = typeof uploadSessionManager.peekSession === "function"
     ? uploadSessionManager.peekSession(uploadId)
     : uploadSessionManager.getSession(uploadId, { includeExpired: true });
 
   if (!session) {
-    return NextResponse.json({ error: "Upload session not found or expired" }, { status: 404 });
+    if (uploadedParts && uploadedParts.length > 0) {
+      const parts = uploadedParts.map((p) => ({
+        ...p,
+        uploadedAt: p.uploadedAt || Date.now(),
+      }));
+      session = {
+        uploadId,
+        expectedTotalParts: parts.length,
+        channelId,
+        fileName: "",
+        kind,
+        title,
+        class: classNum,
+        subject,
+        chapterNo,
+        receivedParts: parts.map((p) => p.partNo),
+        uploadedParts: parts,
+        partsMeta: parts,
+        uploadedMessageIds: parts.map((p) => p.tgMessageId),
+        hashStream: crypto.createHash("sha256"),
+        finalSha256: clientSha256 || parts[0]?.sha256,
+        totalBytes: parts.reduce((acc, p) => acc + p.sizeBytes, 0),
+        totalBytesReceived: parts.reduce((acc, p) => acc + p.sizeBytes, 0),
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        lastActivityAt: Date.now(),
+        isProcessing: false,
+      };
+      (uploadSessionManager as unknown as { sessions: Map<string, unknown> }).sessions?.set?.(uploadId, session);
+    } else {
+      return NextResponse.json({ error: "Upload session not found or expired" }, { status: 404 });
+    }
   }
 
   // Helper for rolling back Telegram messages and clearing session

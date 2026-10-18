@@ -272,6 +272,7 @@ export async function POST(req: NextRequest) {
       total: totalParts,
       messageId: tgRes.messageId,
       fileId: tgRes.fileId,
+      partRecord,
     });
   } finally {
     uploadSessionManager.releaseLock(uploadId);

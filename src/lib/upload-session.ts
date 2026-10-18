@@ -716,5 +716,12 @@ export class UploadSessionManager {
   }
 }
 
-// Global default singleton for application routes
-export const uploadSessionManager = new UploadSessionManager();
+// Global default singleton for application routes (attached to globalThis for Next.js cross-route and dev HMR persistence)
+const globalForUpload = globalThis as unknown as {
+  uploadSessionManager?: UploadSessionManager;
+};
+
+export const uploadSessionManager =
+  globalForUpload.uploadSessionManager ?? new UploadSessionManager();
+
+globalForUpload.uploadSessionManager = uploadSessionManager;

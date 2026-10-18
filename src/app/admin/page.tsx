@@ -400,6 +400,14 @@ export default function AdminDashboardPage() {
 
       const totalParts = Math.max(1, Math.ceil(file.size / CHUNK_SIZE));
       const uploadId = `upload_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+      const collectedParts: Array<{
+        partNo: number;
+        tgFileId: string;
+        tgFileUniqueId: string;
+        tgMessageId: number;
+        sizeBytes: number;
+        sha256: string;
+      }> = [];
 
       // Upload parts sequentially
       for (let part = 1; part <= totalParts; part++) {
@@ -439,6 +447,11 @@ export default function AdminDashboardPage() {
             errJson.error || `Upload failed on part ${part}/${totalParts} (HTTP ${partRes.status})`
           );
         }
+
+        const partJson = await partRes.json().catch(() => ({}));
+        if (partJson.partRecord) {
+          collectedParts.push(partJson.partRecord);
+        }
       }
 
       setUploadModal((prev) => ({
@@ -446,6 +459,20 @@ export default function AdminDashboardPage() {
         progressMessage: "Finalizing and indexing material in Supabase & Telegram...",
         progressPercent: 95,
       }));
+
+      // Compute client-side SHA-256 for cryptographic verification
+      let clientSha256: string | undefined = undefined;
+      try {
+        if (typeof crypto !== "undefined" && crypto.subtle) {
+          const buffer = await file.arrayBuffer();
+          const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
+          clientSha256 = Array.from(new Uint8Array(hashBuffer))
+            .map((b) => b.toString(16).padStart(2, "0"))
+            .join("");
+        }
+      } catch {
+        // Fallback gracefully
+      }
 
       // Complete upload session
       const completeRes = await fetch("/api/admin/upload/complete", {
@@ -463,6 +490,8 @@ export default function AdminDashboardPage() {
           kind: uploadModal.kind,
           teacherName: uploadModal.kind === "teacher_notes" ? uploadModal.teacherName.trim() : undefined,
           hasAccompanyingPdf: Boolean(uploadModal.accompanyingPdf),
+          clientSha256,
+          uploadedParts: collectedParts.length > 0 ? collectedParts : undefined,
         }),
       });
 
